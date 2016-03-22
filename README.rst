@@ -24,6 +24,13 @@ GDB_
 
 Python scripting support is required.
 
+BinTut is developed with Python 3,
+but it's intended to be Python 2 compatible.
+
+However, if Python 2 does yell at you,
+feel free to create an issue or send me a pull request.
+
+
 Pat_
 ++++
 
@@ -86,11 +93,10 @@ frame-faking
 Bug Reports
 ===========
 
-https://github.com/NoviceLive/bintut/issues.
+Create `issues <https://github.com/NoviceLive/bintut/issues>`_.
 
-BinTut is intended to be Python 2 compatible.
-
-Bug reports are welcome.
+BinTut may or may not work on your system,
+but bug reports with necessary information are always welcome.
 
 
 References
@@ -105,6 +111,6 @@ References
 .. _Pat: https://github.com/NoviceLive/pat
 .. _Colorama: https://github.com/tartley/colorama
 .. _Click: https://github.com/mitsuhiko/click
-.. Stack-based buffer overflow: https://en.wikipedia.org/wiki/Stack_buffer_overflow
-.. nop-slide: https://en.wikipedia.org/wiki/NOP_slide
-.. ret2lib: https://en.wikipedia.org/wiki/Return-to-libc_attack
+.. _Stack-based buffer overflow: https://en.wikipedia.org/wiki/Stack_buffer_overflow
+.. _nop-slide: https://en.wikipedia.org/wiki/NOP_slide
+.. _ret2lib: https://en.wikipedia.org/wiki/Return-to-libc_attack
