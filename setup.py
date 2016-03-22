@@ -22,7 +22,7 @@ from setuptools import setup, find_packages
 
 
 __author__ = 'Gu Zhengxiong'
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 
 PROGRAM_NAME = 'BinTut'
 PACKAGE_NAME = 'bintut'

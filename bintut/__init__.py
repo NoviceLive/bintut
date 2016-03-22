@@ -19,7 +19,7 @@ along with BinTut.  If not, see <http://www.gnu.org/licenses/>.
 
 
 __author__ = 'Gu Zhengxiong'
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 
 
 PROGRAM_NAME = 'BinTut'

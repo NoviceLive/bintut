@@ -6,7 +6,7 @@
 #
 
 
-TARGET=./targets/auto
+TARGET=./miscbin/auto
 
 
 for time in {1..4}; do

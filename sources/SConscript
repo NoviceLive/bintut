@@ -1,6 +1,3 @@
-Program('auto.c')
-
-
 Program('nx_off-canary_off-x86',
         Object('1fread.o', 'fread.c', CCFLAGS='-m32'),
         LINKFLAGS=['-m32', '-zexecstack', '-fno-stack-protector'])
