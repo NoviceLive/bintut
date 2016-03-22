@@ -1,2 +1,2 @@
 SConscript('sources/SConscript',
-           variant_dir='targets', duplicate=False)
+           variant_dir='bintut/targets', duplicate=False)

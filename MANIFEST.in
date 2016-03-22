@@ -1,5 +1,5 @@
 include *.txt
 include SConstruct
 graft sources
-include targets/*
-exclude targets/*.o
+include bintut/courses/targets/*
+exclude bintut/courses/targets/*.o

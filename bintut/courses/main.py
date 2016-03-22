@@ -39,9 +39,10 @@ pat = Pat()
 
 def main(course, bits, burst):
     init()
-    courses = resource_filename(__name__, '')
-    root = join(courses, '..', '..')
-    target = realpath(join(root, 'targets', select_target(course)))
+    target = select_target(course)
+    target = resource_filename('bintut.courses.targets', target)
+    # root = join(courses, '..')
+    # target = realpath(join(root, 'targets', ))
     name = '{}-{}.bin'.format(course, 'x86' if bits == 32 else 'x64')
     name = realpath(name)
     with open(name, 'w') as stream:

@@ -36,6 +36,8 @@ setup(
     name=PROGRAM_NAME,
     version=__version__,
     packages=find_packages(),
+    package_data={'bintut.courses.targets': ['nx_off-canary_off-x86',
+                                         'nx_on-canary_off-x86']},
     install_requires=requirements,
     entry_points={
         'console_scripts': [
