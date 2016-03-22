@@ -1,0 +1,5 @@
+include *.txt
+include SConstruct
+graft sources
+include targets/*
+exclude targets/*.o

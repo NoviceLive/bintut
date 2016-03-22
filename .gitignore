@@ -1,0 +1,5 @@
+.sconsign.dblite
+*.pyc
+dist
+*.egg-info
+*.bin
