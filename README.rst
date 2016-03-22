@@ -8,7 +8,12 @@ classical binary vulnerabilities.
 Installation
 ============
 
-``pip install bintut`` shall work.
+``pip install bintut`` may or may not work for the time being.
+
+Therefore it's recommended to just clone this repository
+and run without installation
+as long as necessary libraries are installed
+by ``pip install -r requirements.txt``.
 
 
 Requirements
@@ -35,8 +40,8 @@ Click_
 Python composable command line utility http://click.pocoo.org/.
 
 
-Usage
-=====
+Get Started
+===========
 
 See ``bintut --help`` and give a shot
 via ``bintut --burst frame-faking``.
