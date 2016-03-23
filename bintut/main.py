@@ -44,8 +44,9 @@ COURSES = [
               help='List available courses.')
 @click.option('-6', '--x64', is_flag=True,
               help='Use x64 courses.')
-@click.option('-b', '--burst', is_flag=True,
-              help='Turn on burst mode.')
+@click.option('-b', '--burst',
+              type=float, default=0, show_default=True,
+              help='Use this burst mode interval.')
 @click.argument('course', required=False)
 def main(course, list_courses, x64, burst):
     """Teach You A Binary Exploitation For Great Good."""

@@ -34,6 +34,29 @@ from .helpers import get_bits
 from .utils import cyan, green, red, yellow
 
 
+def redisplay(bits, burst,
+              course=None, repl=True, target=None):
+    gdb.execute('shell clear')
+    course = course if course else ''
+    course += ' @ ' + target if target else ''
+    if burst:
+        print(red('==> Burst Mode: {}\n'.format(course)))
+    else:
+        print(yellow('==> Single Mode: {}\n'.format(course)))
+    print_stack(bits)
+    print_reg()
+    print_asm()
+    if burst:
+        sleep(burst)
+    elif repl:
+        try:
+            print()
+            REPL().cmdloop()
+        except Exception as error:
+            print(error)
+            exit(1)
+
+
 def print_stack(bits):
     sp = '$esp' if bits == 32 else '$rsp'
     count = 32
@@ -84,6 +107,7 @@ def print_asm():
     if not found:
         raise RuntimeError('pc not found')
 
+
 def repr_asm(asm, pc):
     child = gdb.selected_inferior()
     mem = child.read_memory(asm['addr'], asm['length'])
@@ -96,29 +120,6 @@ def repr_asm(asm, pc):
         return Back.GREEN + line
     else:
         return line
-
-
-def redisplay(bits, burst=False,
-              course=None, repl=True, target=None):
-    gdb.execute('shell clear')
-    course = course if course else ''
-    course += ' @ ' + target if target else ''
-    if burst:
-        print(red('==> Burst Mode: {}\n'.format(course)))
-    else:
-        print(yellow('==> Single Mode: {}\n'.format(course)))
-    print_stack(bits)
-    print_reg()
-    print_asm()
-    if burst:
-        sleep(0.2)
-    elif repl:
-        try:
-            print()
-            REPL().cmdloop()
-        except Exception as error:
-            print(error)
-            exit(1)
 
 
 def print_reg():
