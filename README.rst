@@ -1,6 +1,9 @@
 BinTut
 ======
 
+.. image:: https://img.shields.io/pypi/v/bintut.svg
+   :target: https://pypi.python.org/pypi/BinTut
+
 Dynamic demonstration of the exploitation of
 classical binary vulnerabilities.
 
@@ -56,7 +59,7 @@ as in `Arch Linux`_.
 Debian_
 +++++++
 
-GDB from the stable branch of Debian_ ships with Python 2,
+GDB_ from the stable branch of Debian_ ships with Python 2,
 where BinTut 0.2.1 does not work.
 
 Lastest source from Git works with minor problems.
