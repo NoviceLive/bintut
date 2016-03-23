@@ -18,6 +18,7 @@ along with BinTut.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 
+from __future__ import print_function
 from binascii import hexlify
 from sys import exit
 from time import sleep
@@ -33,14 +34,17 @@ from .helpers import get_bits
 from .utils import cyan, green, red, yellow
 
 
-def print_stack():
-    bits = get_bits()
+def print_stack(bits):
     sp = '$esp' if bits == 32 else '$rsp'
     count = 32
     before = (count*4) / 2
-    stack = gdb.execute(
-        'x/{}wx {}-{}'.format(count, sp, int(before)),
-        to_string=True)
+    try:
+        stack = gdb.execute(
+            'x/{}wx {}-{}'.format(count, sp, int(before)),
+            to_string=True)
+    except gdb.error:
+        print('print_stack:', 'Error')
+        return
     repr_stack(stack, Register().sp)
     print()
 
@@ -56,10 +60,17 @@ def repr_stack(stack, sp):
 
 
 def print_asm():
-    frame = gdb.selected_frame()
-    arch = frame.architecture()
-    pc = frame.pc()
-    asms = arch.disassemble(pc, pc+32)
+    try:
+        frame = gdb.selected_frame()
+        arch = frame.architecture()
+        ip = Register().ip
+        print(ip)
+        pc = int(ip, 16)
+        asms = arch.disassemble(pc, pc+32)
+    except (gdb.MemoryError, gdb.error) as error:
+        print('disas:', error)
+        return
+    # print(asms)
     found = False
     for index, asm in enumerate(asms):
         if asm['addr'] == pc:
@@ -76,8 +87,9 @@ def print_asm():
 def repr_asm(asm, pc):
     child = gdb.selected_inferior()
     mem = child.read_memory(asm['addr'], asm['length'])
+    addr = hex(asm['addr']).strip('L')
     line = '{:25} {:25} {}'.format(
-        cyan(hex(asm['addr']), res=False),
+        cyan(addr, res=False),
         green(hexlify(mem).decode('utf-8'), res=False),
         red(asm['asm']), res=False)
     if asm['addr'] == pc:
@@ -86,8 +98,35 @@ def repr_asm(asm, pc):
         return line
 
 
+def redisplay(bits, burst=False,
+              course=None, repl=True, target=None):
+    gdb.execute('shell clear')
+    course = course if course else ''
+    course += ' @ ' + target if target else ''
+    if burst:
+        print(red('==> Burst Mode: {}\n'.format(course)))
+    else:
+        print(yellow('==> Single Mode: {}\n'.format(course)))
+    print_stack(bits)
+    print_reg()
+    print_asm()
+    if burst:
+        sleep(0.2)
+    elif repl:
+        try:
+            print()
+            REPL().cmdloop()
+        except Exception as error:
+            print(error)
+            exit(1)
+
+
 def print_reg():
-    print(Register())
+    try:
+        print(Register())
+    except gdb.error:
+        print('print_reg:', 'Error')
+        return
 
 
 class Register(object):
@@ -112,36 +151,6 @@ class Register(object):
         except AttributeError:
             return 'EIP: {} ESP: {} EBP: {}\n'.format(
                 self.eip, self.esp, self.ebp)
-
-
-def redisplay(burst=False, course=None, repl=True, target=None):
-    try:
-        dummy_bits = get_bits()
-    except gdb.error as error:
-        print(error)
-        exit(0)
-    gdb.execute('shell clear')
-    course = course if course else ''
-    course += ' @ ' + target if target else ''
-    if burst:
-        print(red('==> Burst Mode: {}\n'.format(course)))
-    else:
-        print(yellow('==> Single Mode: {}\n'.format(course)))
-    try:
-        print_stack()
-        print_reg()
-        print_asm()
-    except gdb.MemoryError:
-        pass
-    if burst:
-        sleep(0.2)
-    elif repl:
-        try:
-            print()
-            REPL().cmdloop()
-        except Exception as error:
-            print(error)
-            exit(1)
 
 
 class REPL(Cmd):

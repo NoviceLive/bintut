@@ -49,7 +49,7 @@ def p32(addr):
 def pause(message):
     try:
         input(message)
-    except EOFError:
+    except (EOFError, SyntaxError):
         pass
 
 

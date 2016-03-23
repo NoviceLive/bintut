@@ -18,6 +18,7 @@ along with BinTut.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 
+from __future__ import print_function
 from os.path import join, realpath, relpath
 
 try:
@@ -39,15 +40,19 @@ pat = Pat()
 
 def main(course, bits, burst):
     init()
-    target = select_target(course)
-    target = resource_filename('bintut.courses.targets', target)
-    # root = join(courses, '..')
-    # target = realpath(join(root, 'targets', ))
+
+    bin_name = select_target(course)
+    root = resource_filename(__name__, '')
+    target = realpath(join(root, 'targets', bin_name))
+    print('target:', target)
+
     name = '{}-{}.bin'.format(course, 'x86' if bits == 32 else 'x64')
     name = realpath(name)
     with open(name, 'w') as stream:
         stream.write(pat.create(400))
+
     offset, addr = get_offset(target, name, bits, burst, course)
+
     if offset:
         print('\nFound offset: {offset}'.format(offset=offset))
         write_payload(offset, addr, name, course)
@@ -91,7 +96,10 @@ def get_offset(target, name, bits, burst, course):
                 gdb.execute('nexti', to_string=True)
             except KeyboardInterrupt:
                 break
-        redisplay(burst=burst, target=relpath(target), course=course)
+            except gdb.MemoryError:
+                pass
+        redisplay(bits, burst=burst,
+                  target=relpath(target), course=course)
     return None, None
 
 
@@ -114,7 +122,7 @@ def write_payload(offset, addr, name, post):
     elif post == 'mprotect':
         payload = mprotect(offset, addr)
 
-    print(payload)
+    # print(payload, type(payload))
     print('file:', name)
     with open(name, 'wb') as stream:
         stream.write(payload)
