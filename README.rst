@@ -16,6 +16,75 @@ as long as necessary libraries are installed
 by ``pip install -r requirements.txt``.
 
 
+Tested Platforms
+----------------
+
+`Arch Linux`_
++++++++++++++
+
+Current version of `Arch Linux`_ ships GDB_ with Python 3,
+in which I developed BinTut.
+
+Version 0.2.1 should work fine.
+
+Fedora_
++++++++
+
+Fedora_ 23 Workstation comes with GDB with Python 3,
+which has been tested
+and BinTut version 0.2.1 is known to work properly
+as in `Arch Linux`_.
+
+- Install ``glibc.i686`` to support 32-bit programs if needed.
+
+  ::
+
+     sudo dnf install glibc.i686
+
+- Install ``BinTut`` from PyPI.
+
+  ::
+
+     sudo pip3 install bintut
+
+- Give it a try.
+
+  ::
+
+     bintut -b frame-faking
+
+Debian_
++++++++
+
+GDB from the stable branch of Debian_ ships with Python 2,
+where BinTut 0.2.1 does not work.
+
+Lastest source from Git works with minor problems.
+
+- Add support to 32-bit programs if necessary.
+
+  ::
+
+     sudo dpkg --add-architecture i386
+     sudo apt-get update
+     sudo apt-get install libc6:i386
+
+- Clone the lastest source from Git and install requirements.
+
+  ::
+
+     git clone https://github.com/NoviceLive/bintut.git
+     cd bintut
+     sudo apt-get install python-pip
+     pip2 install -r requirements.txt
+
+- Run it without installation.
+
+  ::
+
+     python2 ./bintut.py -b frame-faking
+
+
 Requirements
 ------------
 
@@ -27,9 +96,8 @@ Python scripting support is required.
 BinTut is developed with Python 3,
 but it's intended to be Python 2 compatible.
 
-However, if Python 2 does yell at you,
+Therefore, when Python 2 yells at you,
 feel free to create an issue or send me a pull request.
-
 
 Pat_
 ++++
@@ -44,13 +112,13 @@ Simple cross-platform colored terminal text in Python.
 Click_
 ++++++
 
-Python composable command line utility http://click.pocoo.org/.
+Python composable command line utility.
 
 
 Get Started
 ===========
 
-See ``bintut --help`` and give a shot
+See ``bintut --help`` and give it a shot
 via ``bintut --burst frame-faking``.
 
 ::
@@ -74,20 +142,20 @@ Available Courses
 `Stack-based buffer overflow`_
 ------------------------------
 
-plain
-+++++
-
-
-`nop-slide`_
-++++++++++++
-
-
-ret2lib_
+1. plain
 ++++++++
 
 
-frame-faking
-++++++++++++
+2. `nop-slide`_
++++++++++++++++
+
+
+3. ret2lib_
++++++++++++
+
+
+4. frame-faking
++++++++++++++++
 
 
 Bug Reports
@@ -107,6 +175,9 @@ References
 - `Advanced return-into-lib(c) exploits (PaX case study) <http://phrack.org/issues/58/4.html>`_
 
 
+.. _Arch Linux: https://www.archlinux.org/
+.. _Fedora: https://getfedora.org/
+.. _Debian: https://www.debian.org/
 .. _GDB: http://www.gnu.org/software/gdb/
 .. _Pat: https://github.com/NoviceLive/pat
 .. _Colorama: https://github.com/tartley/colorama
