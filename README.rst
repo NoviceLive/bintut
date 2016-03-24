@@ -54,7 +54,7 @@ as in `Arch Linux`_.
 
   ::
 
-     bintut -b frame-faking
+     bintut -b0.1 frame-faking
 
 Debian_
 +++++++
@@ -85,7 +85,7 @@ Lastest source from Git works with minor problems.
 
   ::
 
-     python2 ./bintut.py -b frame-faking
+     python2 ./bintut.py -b0.1 frame-faking
 
 
 Requirements
@@ -122,21 +122,21 @@ Get Started
 ===========
 
 See ``bintut --help`` and give it a shot
-via ``bintut --burst frame-faking``.
+via ``bintut --burst 0.1 frame-faking``.
 
 ::
 
-   bintut --help
-   Usage: bintut [OPTIONS] [COURSE]
+   ./bintut.py --help
+   Usage: bintut.py [OPTIONS] [COURSE]
 
      Teach You A Binary Exploitation For Great Good.
 
    Options:
-     -V, --version  Show the version and exit.
-     -l, --list     List available courses.
-     -6, --x64      Use x64 courses.
-     -b, --burst    Turn on burst mode.
-     -h, --help     Show this message and exit.
+     -V, --version      Show the version and exit.
+     -l, --list         List available courses.
+     -6, --x64          Use x64 courses.
+     -b, --burst FLOAT  Use this burst mode interval.  [default: 0]
+     -h, --help         Show this message and exit.
 
 
 Available Courses
@@ -148,17 +148,25 @@ Available Courses
 1. plain
 ++++++++
 
+Linux x86.
+
 
 2. `nop-slide`_
 +++++++++++++++
+
+Linux x86.
 
 
 3. ret2lib_
 +++++++++++
 
+Linux x86.
+
 
 4. frame-faking
 +++++++++++++++
+
+Linux x86.
 
 
 Bug Reports
