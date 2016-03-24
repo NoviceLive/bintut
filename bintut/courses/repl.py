@@ -148,10 +148,10 @@ class Register(object):
     def __repr__(self):
         try:
             return 'RIP: {} RSP: {} RBP: {}\n'.format(
-                self.rip, self.rsp, self.rbp)
+                red(self.rip), yellow(self.rsp), cyan(self.rbp))
         except AttributeError:
             return 'EIP: {} ESP: {} EBP: {}\n'.format(
-                self.eip, self.esp, self.ebp)
+                red(self.eip), yellow(self.esp), cyan(self.ebp))
 
 
 class REPL(Cmd):

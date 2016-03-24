@@ -23,34 +23,40 @@ try:
 except ImportError:
     pass
 
+from .utils import red, yellow
+
 
 # TODO: Make it a class.
+# TODO: Use other libraries.
 def Addr(func_name):
     if func_name == '/bin/sh':
-        return get_bin_sh_str()
+        addr = get_bin_sh_str()
     elif func_name == 'leave_ret':
-        return get_leave_ret_gadget()
+        addr = get_leave_ret_gadget()
     else:
         raw = gdb.execute('p {}'.format(func_name), to_string=True)
         addr = raw.split()[-2]
-        return addr
+    print(yellow(func_name), red(addr))
+    return addr
 
 
 def get_leave_ret_gadget():
-    # TODO: Remove hardcoded behaviors.
+    # TODO: Remove hardcoded ad-hoc behaviors.
+    # TODO: Use other libraries.
     leave = gdb.execute('disas read_file',
                         to_string=True).splitlines()[-3]
-    return leave.split()[0]
+    gadget = leave.split()[0]
+    return gadget
 
 
 def get_bin_sh_str():
+    # TODO: Remove hardcoded ad-hoc behaviors.
+    # TODO: Use other libraries.
     start = Addr('__libc_start_main')
-    print('!!! executing find...')
     found = gdb.execute('find {}, +2000000, "/bin/sh"'.format(
         start), to_string=True)
-    print(found)
-    binsh = found.splitlines()[0]
-    return binsh
+    bin_sh = found.splitlines()[0]
+    return bin_sh
 
 
 def get_bits():

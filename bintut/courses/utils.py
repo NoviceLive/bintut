@@ -41,7 +41,7 @@ def select_target(course):
 
 
 # TODO: Make it a class.
-
+# TODO: Use other libaries.
 def p32(addr):
     return unhexlify(addr[2:])[::-1]
 
@@ -54,6 +54,8 @@ def pause(message):
 
 
 # TODO: Write a wrapper.
+# TODO: Use other libraries.
+
 
 def green(text, **kwargs):
     return color(text, Fore.GREEN, **kwargs)
@@ -82,8 +84,7 @@ def color(text, fore='', back='', res=True):
     return prefix + text + suffix
 
 
-# TODO
-
+# TODO: Support line editing.
 def setup_read_line(history_dir='.'):
     """Setup readline.
 

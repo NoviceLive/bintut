@@ -5,3 +5,6 @@ dist
 *.bin
 *.o
 build
+*.obj
+*.pdb
+*.ilk
