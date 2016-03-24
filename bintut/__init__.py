@@ -18,6 +18,9 @@ along with BinTut.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 
+from __future__ import division, absolute_import, print_function
+
+
 __author__ = 'Gu Zhengxiong'
 __version__ = '0.2.1'
 

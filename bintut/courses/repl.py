@@ -18,7 +18,7 @@ along with BinTut.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 
-from __future__ import print_function
+from __future__ import division, absolute_import, print_function
 from binascii import hexlify
 from sys import exit
 from time import sleep

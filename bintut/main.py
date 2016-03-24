@@ -18,6 +18,7 @@ along with BinTut.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 
+from __future__ import division, absolute_import, print_function
 import sys
 from subprocess import check_call
 from os.path import join

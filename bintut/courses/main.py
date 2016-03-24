@@ -18,7 +18,7 @@ along with BinTut.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 
-from __future__ import print_function
+from __future__ import division, absolute_import, print_function
 from os.path import join, realpath, relpath
 
 try:
@@ -115,6 +115,7 @@ def init():
     gdb.execute('set disable-randomization on')
 
 
+# TODO: Make it a class.
 def make_payload(offset, addr, post):
     fill = b'A' * offset
     if post == 'plain':
