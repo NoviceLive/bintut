@@ -8,3 +8,5 @@ build
 *.obj
 *.pdb
 *.ilk
+.gdb_history
+peda-session-*
