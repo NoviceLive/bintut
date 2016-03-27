@@ -13,13 +13,13 @@ Program('nx_on-canary_off-x86',
 #         LINKFLAGS=['-m32', '-fstack-protector-all'])
 
 
-# Program('nx_off-canary_off-x64',
-#         Object('1fread64.o', 'fread.c', CCFLAGS=''),
-#         LINKFLAGS=['-zexecstack', '-fno-stack-protector'])
+Program('nx_off-canary_off-x64',
+        Object('1fread64.o', 'fread.c', CCFLAGS=''),
+        LINKFLAGS=['-zexecstack', '-fno-stack-protector'])
 
-# Program('nx_on-canary_off-x64',
-#         Object('2fread64.o', 'fread.c', CCFLAGS=''),
-#         LINKFLAGS=['-fno-stack-protector'])
+Program('nx_on-canary_off-x64',
+        Object('2fread64.o', 'fread.c', CCFLAGS=''),
+        LINKFLAGS=['-fno-stack-protector'])
 
 # Program('nx_on-canary_on-x64',
 #         Object('3fread64.o', 'fread.c', CCFLAGS=''),

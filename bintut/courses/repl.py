@@ -19,6 +19,7 @@ along with BinTut.  If not, see <http://www.gnu.org/licenses/>.
 
 
 from __future__ import division, absolute_import, print_function
+from logging import getLogger
 from binascii import hexlify
 from sys import exit
 from time import sleep
@@ -31,7 +32,10 @@ except ImportError:
 from colorama import Back
 
 from .helpers import get_bits
-from .utils import cyan, green, red, yellow
+from .init import cyan, green, red, yellow
+
+
+logging = getLogger(__name__)
 
 
 def redisplay(bits, burst,
@@ -53,7 +57,7 @@ def redisplay(bits, burst,
             print()
             REPL().cmdloop()
         except Exception as error:
-            print(error)
+            logging.error(error)
             exit(1)
 
 
@@ -65,21 +69,19 @@ def print_stack(bits):
         stack = gdb.execute(
             'x/{}wx {}-{}'.format(count, sp, int(before)),
             to_string=True)
-    except gdb.error:
-        print('print_stack:', 'Error')
+    except gdb.error as error:
+        logging.error(error)
         return
     repr_stack(stack, Register().sp)
     print()
 
 
-def repr_stack(stack, sp):
-    for line in stack.splitlines():
-        addr, values = line.split(':')
-        values = ' '.join(values.split())
-        if addr == sp:
-            print(Back.GREEN + red(addr, res=False), yellow(values))
-        else:
-            print(red(addr), cyan(values))
+def print_reg():
+    try:
+        print(Register())
+    except gdb.error as error:
+        logging.error(error)
+        return
 
 
 def print_asm():
@@ -91,7 +93,7 @@ def print_asm():
         pc = int(ip, 16)
         asms = arch.disassemble(pc, pc+32)
     except (gdb.MemoryError, gdb.error) as error:
-        print('disas:', error)
+        logging.error(error)
         return
     # print(asms)
     found = False
@@ -108,6 +110,16 @@ def print_asm():
         raise RuntimeError('pc not found')
 
 
+def repr_stack(stack, sp):
+    for line in stack.splitlines():
+        addr, values = line.split(':')
+        values = ' '.join(values.split())
+        if addr == sp:
+            print(Back.GREEN + red(addr, res=False), yellow(values))
+        else:
+            print(red(addr), cyan(values))
+
+
 def repr_asm(asm, pc):
     child = gdb.selected_inferior()
     mem = child.read_memory(asm['addr'], asm['length'])
@@ -120,14 +132,6 @@ def repr_asm(asm, pc):
         return Back.GREEN + line
     else:
         return line
-
-
-def print_reg():
-    try:
-        print(Register())
-    except gdb.error:
-        print('print_reg:', 'Error')
-        return
 
 
 class Register(object):
@@ -165,6 +169,9 @@ class REPL(Cmd):
     def do_quit(dummy):
         return True
 
+    def emptyline(self):
+        return True
+
     def do_redis(self, dummy_line):
         redisplay(repl=False)
 
@@ -172,7 +179,6 @@ class REPL(Cmd):
         try:
             output = gdb.execute(line, to_string=True)
         except gdb.error as error:
-            print(red('Error executing command: {}'.format(line)))
-            print(error)
+            logging.error(error)
         else:
             print(output)

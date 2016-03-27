@@ -19,7 +19,9 @@ along with BinTut.  If not, see <http://www.gnu.org/licenses/>.
 
 
 from __future__ import division, absolute_import, print_function
+import logging
 from os.path import join, realpath, relpath
+from sys import stderr
 
 try:
     import gdb
@@ -28,19 +30,25 @@ except ImportError:
 from pkg_resources import resource_filename
 from pat import Pat
 
+from .init import LevelFormatter, red, cyan
 from .utils import select_target
 from .repl import redisplay
 from .exploit import (
     plain, nop_slide, ret_to_func, frame_faking, mprotect)
-from .utils import pause, red, cyan
+from .utils import pause
 
 
 pat = Pat()
 
 
-def main(course, bits, burst):
+def main(course, bits, burst, level):
+    logger = logging.getLogger()
+    handler = logging.StreamHandler(stderr)
+    handler.setFormatter(LevelFormatter())
+    logger.addHandler(handler)
+    logger.setLevel(level)
     init()
-    bin_name = select_target(course)
+    bin_name = select_target(course, bits)
     root = resource_filename(__name__, '')
     target = realpath(join(root, 'targets', bin_name))
     name = '{}-{}.bin'.format(course, 'x86' if bits == 32 else 'x64')
@@ -49,18 +57,18 @@ def main(course, bits, burst):
         stream.write(pat.create(400))
     offset, addr = get_offset(target, name, bits, burst, course)
     if offset:
-        print(cyan('\nFound offset: {offset}'.format(offset=offset)))
-        payload = make_payload(offset, addr, course)
-        print(cyan('Writing payload: {}'.format(name)))
+        logging.info('\nFound offset: %s', offset)
+        payload = make_payload(offset, addr, course, bits)
+        logging.info('Writing payload: %s', name)
         with open(name, 'wb') as stream:
             stream.write(payload)
         # TODO: Implement a pretty printer for humans.
-        print('{} Bytes'.format(len(payload)))
-        print(payload)
+        logging.info('%s Bytes', len(payload))
+        logging.info(payload)
         pause(cyan('Enter to test the payload...'))
         get_offset(target, name, bits, burst, course)
     else:
-        print(red('Offset Not Found'))
+        logging.error('Offset Not Found')
 
 
 def get_offset(target, name, bits, burst, course):
@@ -68,25 +76,36 @@ def get_offset(target, name, bits, burst, course):
     gdb.execute('start {}'.format(name))
     sp = '$esp' if bits == 32 else '$rsp'
     ip = '$eip' if bits == 32 else '$rip'
-    last_sp = ''
+    last_stack = ''
     while True:
         try:
-            cur_sp = gdb.execute('x/32wx {}'.format(sp),
+            cur_sp = gdb.execute('p {}'.format(sp), to_string=True)
+            cur_stack = gdb.execute('x/32wx {}'.format(sp),
                                  to_string=True)
+            last_stack = cur_stack
         except gdb.error as error:
-            print(error)
-            print(red('Exiting Gracefully...'))
-            break
+            if bits == 64:
+                logging.error(last_stack)
+                pattern = last_stack.split()[1]
+                offset = pat.locate(pattern)
+                addr = last_stack.split(':')[0]
+                addr = hex(int(addr, 16) + 8)
+                logging.info('pattern: %s offset: %s addr: %s',
+                             pattern, offset, addr)
+                return offset, addr
+            else:
+                logging.error(error)
+                logging.error('Exiting Gracefully...')
+                break
         try:
             eip = gdb.execute('x/i {}'.format(ip), to_string=True)
-            last_sp = cur_sp
         except gdb.MemoryError as error:
-            print('\nMemoryError:', error.args[0])
+            logging.error(error)
             pattern = error.args[0].split()[-1]
-            addr = cur_sp.split(':')[0]
+            addr = cur_stack.split(':')[0]
             offset = pat.locate(pattern)
-            print('pattern: {} addr: {} offset: {}'.format(
-                red(pattern), red(addr), red(str(offset))))
+            logging.info('pattern: %s addr: %s offset: %s',
+                         pattern, addr, offset)
             if burst:
                 pass
             else:
@@ -101,8 +120,8 @@ def get_offset(target, name, bits, burst, course):
                 gdb.execute('nexti', to_string=True)
             except KeyboardInterrupt:
                 break
-            except gdb.MemoryError:
-                pass
+            except gdb.MemoryError as error:
+                logging.error(error)
         redisplay(bits, burst=burst,
                   target=relpath(target), course=course)
     return None, None
@@ -116,10 +135,10 @@ def init():
 
 
 # TODO: Make it a class.
-def make_payload(offset, addr, post):
+def make_payload(offset, addr, post, bits):
     fill = b'A' * offset
     if post == 'plain':
-        payload = fill + plain(addr)
+        payload = fill + plain(addr, bits)
     elif post == 'nop-slide':
         payload = fill + nop_slide(addr)
     elif post == 'ret2lib':

@@ -29,4 +29,4 @@ from courses.main import main
 
 
 if __name__ == '__main__':
-    main(course, bits, burst)
+    main(course, bits, burst, level)

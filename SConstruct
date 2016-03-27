@@ -3,4 +3,4 @@ SConscript('sources/SConscript',
 
 
 SConscript('sources/SConsmisc',
-           variant_dir='bin', duplicate=False)
+           variant_dir='miscbin', duplicate=False)

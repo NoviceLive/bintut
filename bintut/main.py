@@ -19,6 +19,7 @@ along with BinTut.  If not, see <http://www.gnu.org/licenses/>.
 
 
 from __future__ import division, absolute_import, print_function
+import logging
 import sys
 from subprocess import check_call
 from os.path import join
@@ -49,7 +50,9 @@ COURSES = [
               type=float, default=0, show_default=True,
               help='Use this burst mode interval.')
 @click.argument('course', required=False)
-def main(course, list_courses, x64, burst):
+@click.option('-v', '--verbose', count=True, help='Be verbose.')
+@click.option('-q', '--quiet', count=True, help='Be quiet.')
+def main(course, list_courses, x64, burst, quiet, verbose):
     """Teach You A Binary Exploitation For Great Good."""
     if list_courses:
         print('Available Courses:')
@@ -57,6 +60,7 @@ def main(course, list_courses, x64, burst):
         for index, name in enumerate(COURSES):
             print('    ', index, name)
     elif course:
+        level = logging.INFO + (quiet-verbose)*10
         if course.isdigit():
             try:
                 name = COURSES[int(course)]
@@ -77,5 +81,6 @@ def main(course, list_courses, x64, burst):
             '--eval-command', 'pi burst={}'.format(burst),
             '--eval-command', 'pi course="{}"'.format(course),
             '--eval-command', 'pi bits={}'.format(bits),
+            '--eval-command', 'pi level={}'.format(level),
             '--eval-command', 'source {}'.format(entry)])
     sys.exit(0)

@@ -25,7 +25,7 @@ try:
 except ImportError:
     pass
 
-from .utils import red, yellow
+from .init import red, yellow
 
 
 # TODO: Make it a class.

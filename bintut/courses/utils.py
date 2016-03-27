@@ -28,17 +28,17 @@ try:
 except ImportError:
     pass
 
-from colorama import Fore, Style
 
-
-def select_target(course):
+def select_target(course, bits):
     if course in ['plain', 'nop-slide']:
-        return 'nx_off-canary_off-x86'
+        base = 'nx_off-canary_off-'
     elif course in[
             'ret2lib', 'esp-lifting', 'frame-faking', 'mprotect',
             'rop']:
-        return 'nx_on-canary_off-x86'
-    raise ValueError('Not target for %s', course)
+        base = 'nx_on-canary_off-'
+    else:
+        raise ValueError('Not target for %s', course)
+    return base + ('x86' if bits == 32 else 'x64')
 
 
 # TODO: Make it a class.
@@ -56,33 +56,6 @@ def pause(message):
 
 # TODO: Write a wrapper.
 # TODO: Use other libraries.
-
-
-def green(text, **kwargs):
-    return color(text, Fore.GREEN, **kwargs)
-
-
-def yellow(text, **kwargs):
-    return color(text, Fore.YELLOW, **kwargs)
-
-
-def red(text, **kwargs):
-    return color(text, Fore.RED, **kwargs)
-
-
-def cyan(text, **kwargs):
-    return color(text, Fore.CYAN, **kwargs)
-
-
-def blue(text, **kwargs):
-    return color(text, Fore.BLUE, **kwargs)
-
-
-def color(text, fore='', back='', res=True):
-    prefix = fore + Style.BRIGHT if fore else ''
-    prefix += back if back else ''
-    suffix = Style.RESET_ALL if res else ''
-    return prefix + text + suffix
 
 
 # TODO: Support line editing.
