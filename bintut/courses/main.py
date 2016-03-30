@@ -34,7 +34,8 @@ from .init import LevelFormatter, red, cyan
 from .utils import select_target
 from .repl import redisplay
 from .exploit import (
-    Payload, Fill, Plain, Nop, Shellcode, Ret2Fun, Faked, mprotect)
+    Environment, Payload, Fill, Plain, Nop, Shellcode, Ret2Fun,
+    Faked)
 from .utils import pause
 
 
@@ -42,7 +43,7 @@ pat = Pat()
 
 
 def main(course, bits, burst, level):
-    Payload.bits = bits
+    Environment(bits=bits)
     logger = logging.getLogger()
     handler = logging.StreamHandler(stderr)
     handler.setFormatter(LevelFormatter())
