@@ -24,6 +24,10 @@ from logging import Formatter, DEBUG, INFO, WARNING, ERROR, CRITICAL
 from colorama import Fore, Style
 
 
+# TODO: Write a wrapper.
+# TODO: Use other libraries.
+
+
 def green(text, **kwargs):
     return color(text, Fore.GREEN, **kwargs)
 

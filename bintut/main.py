@@ -20,7 +20,7 @@ along with BinTut.  If not, see <http://www.gnu.org/licenses/>.
 
 from __future__ import division, absolute_import, print_function
 import logging
-import sys
+from sys import exit, platform
 from subprocess import check_call
 from os.path import join
 
@@ -28,6 +28,7 @@ import click
 from pkg_resources import resource_filename
 
 from . import VERSION_PROMPT, PROGRAM_NAME
+from .courses.main import start_tutor
 
 
 COURSES = [
@@ -66,21 +67,24 @@ def main(course, list_courses, x64, burst, quiet, verbose):
                 name = COURSES[int(course)]
             except IndexError:
                 print('No Such Courses!')
-                sys.exit(1)
+                exit(1)
         else:
             if course in COURSES:
                 name = course
             else:
                 print('No Such Courses!')
-                sys.exit(1)
+                exit(1)
         bits = 64 if x64 else 32
         path = resource_filename(__name__, '')
-        entry = join(path, 'entry.py')
-        check_call([
-            'gdb', '--quiet', '--batch',
-            '--eval-command', 'pi burst={}'.format(burst),
-            '--eval-command', 'pi course="{}"'.format(course),
-            '--eval-command', 'pi bits={}'.format(bits),
-            '--eval-command', 'pi level={}'.format(level),
-            '--eval-command', 'source {}'.format(entry)])
-    sys.exit(0)
+        if platform == 'linux':
+            entry = join(path, 'entry.py')
+            check_call([
+                'gdb', '--quiet', '--batch',
+                '--eval-command', 'pi burst={}'.format(burst),
+                '--eval-command', 'pi course="{}"'.format(course),
+                '--eval-command', 'pi bits={}'.format(bits),
+                '--eval-command', 'pi level={}'.format(level),
+                '--eval-command', 'source {}'.format(entry)])
+        else:
+            start_tutor(course, bits, burst, level)
+    exit(0)

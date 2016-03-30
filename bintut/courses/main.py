@@ -33,30 +33,38 @@ from pat import Pat
 from .init import LevelFormatter, red, cyan
 from .utils import select_target
 from .repl import redisplay
-from .exploit import (
+from .debuggers import Debugger
+from .exploits import (
     Environment, Payload, Fill, Plain, Nop, Shellcode, Ret2Fun,
     Faked)
 from .utils import pause
 
 
 pat = Pat()
+debugger = None
 
 
-def main(course, bits, burst, level):
+def start_tutor(course, bits, burst, level):
     Environment(bits=bits)
+    global debugger
+    debugger = Environment.debugger
+
     logger = logging.getLogger()
     handler = logging.StreamHandler(stderr)
     handler.setFormatter(LevelFormatter())
     logger.addHandler(handler)
     logger.setLevel(level)
-    init()
-    bin_name = select_target(course, bits)
+
+    bin_name = select_target(course, Environment.PLATFORM, bits)
     root = resource_filename(__name__, '')
     target = realpath(join(root, 'targets', bin_name))
+    logging.debug('target: %s', target)
+
     name = '{}-{}.bin'.format(course, 'x86' if bits == 32 else 'x64')
     name = realpath(name)
     with open(name, 'w') as stream:
         stream.write(pat.create(400))
+
     offset, addr = get_offset(target, name, bits, burst, course)
     if offset:
         logging.info('\nFound offset: %s', offset)
@@ -74,21 +82,15 @@ def main(course, bits, burst, level):
 
 
 def get_offset(target, name, bits, burst, course):
-    gdb.execute('file {}'.format(target))
-    gdb.execute('start {}'.format(name))
-    sp = '$esp' if bits == 32 else '$rsp'
-    ip = '$eip' if bits == 32 else '$rip'
-    wide = '32wx' if bits == 32 else '16gx'
+    debugger.start(target, [name])
     last_stack = ''
     while True:
         try:
-            cur_stack = gdb.execute('x/{} {}'.format(wide, sp),
-                                 to_string=True)
+            cur_stack = debugger.get_stack()
             last_stack = cur_stack
-        except gdb.error as error:
+        except IOError as error:
             if bits == 64:
-                gdb.execute('file {}'.format(target))
-                gdb.execute('start {}'.format(name))
+                debugger.start(target, [name])
                 logging.error(last_stack)
                 pattern = last_stack.split()[1]
                 offset = pat.locate(pattern)
@@ -104,40 +106,28 @@ def get_offset(target, name, bits, burst, course):
                 logging.error('Exiting Gracefully...')
                 break
         try:
-            eip = gdb.execute('x/i {}'.format(ip), to_string=True)
-        except gdb.MemoryError as error:
-            logging.error(error)
-            pattern = error.args[0].split()[-1]
-            addr = cur_stack.split(':')[0]
+            eip = debugger.get_pc_asm()
+        except IOError as error:
+            addr, pattern = error.args
             offset = pat.locate(pattern)
-            logging.info('pattern: %s addr: %s offset: %s',
-                         pattern, addr, offset)
+            logging.info('addr: %s offset: %s', addr, offset)
             if burst:
                 pass
             else:
                 pause('Enter to return...')
             return offset, addr
         if 'call' in eip and '<read_file>' in eip:
-            gdb.execute('stepi', to_string=True)
+            debugger.step()
         elif '<system>' in eip and burst:
-            gdb.execute('continue')
+            debugger.cont()
         else:
             try:
-                gdb.execute('nexti', to_string=True)
+                debugger.next()
             except KeyboardInterrupt:
                 break
-            except gdb.MemoryError as error:
-                logging.error(error)
-        redisplay(bits, burst=burst,
-                  target=relpath(target), course=course)
+        redisplay(debugger, burst=burst, target=relpath(target),
+                  course=course)
     return None, None
-
-
-def init():
-    gdb.execute('set pagination off')
-    gdb.execute('set disassembly-flavor intel')
-    # TODO: Remove this for ASLR-bypassing courses.
-    gdb.execute('set disable-randomization on')
 
 
 # TODO: Make it a class.
@@ -154,6 +144,6 @@ def make_payload(offset, addr, post, bits):
             Faked('system', ['/bin/sh']) +
             Faked('system', ['/bin/sh']) +
             Faked('exit', [0]))
-    elif post == 'mprotect':
-        payload = mprotect(offset, addr)
+    else:
+        raise ValueError('No such payload!')
     return payload.payload

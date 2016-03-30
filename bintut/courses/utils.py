@@ -27,9 +27,21 @@ try:
     import readline
 except ImportError:
     pass
+from collections import defaultdict
 
 
-def select_target(course, bits):
+def tree():
+    return defaultdict(tree)
+
+
+# TODO: Use other methods.
+class LoggingMixin(object):
+    def __init__(self):
+        from logging import getLogger
+        self.logger = getLogger(self.__class__.__name__)
+
+
+def select_target(course, platform, bits):
     if course in ['plain', 'nop-slide']:
         base = 'nx_off-canary_off-'
     elif course in[
@@ -38,7 +50,9 @@ def select_target(course, bits):
         base = 'nx_on-canary_off-'
     else:
         raise ValueError('Not target for %s', course)
-    return base + ('x86' if bits == 32 else 'x64')
+    abi = 'x86' if bits == 32 else 'x64'
+    ext = '' if platform == 'linux' else '.exe'
+    return '{}{}{}'.format(base, abi, ext)
 
 
 # TODO: Make it a class.
@@ -52,10 +66,6 @@ def pause(message):
         input(message)
     except (EOFError, SyntaxError):
         pass
-
-
-# TODO: Write a wrapper.
-# TODO: Use other libraries.
 
 
 # TODO: Support line editing.

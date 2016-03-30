@@ -25,8 +25,8 @@ from pkg_resources import resource_filename
 
 sys.path.append(resource_filename(__name__, ''))
 
-from courses.main import main
+from courses.main import start_tutor
 
 
 if __name__ == '__main__':
-    main(course, bits, burst, level)
+    start_tutor(course, bits, burst, level)
