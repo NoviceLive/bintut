@@ -190,13 +190,13 @@ Available Courses
 1. plain
 ++++++++
 
-Linux x86.
+Linux x86 / x64.
 
 
 2. `nop-slide`_
 +++++++++++++++
 
-Linux x86.
+Linux x86 / x64.
 
 This course is not demonstrative enough
 and shall be updated when the author finds a scenario

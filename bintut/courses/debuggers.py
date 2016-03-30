@@ -32,10 +32,11 @@ except ImportError:
 from colorama import Back
 
 from .init import cyan, green, red, yellow
+from .helpers import align_32, align_64
 from .utils import LoggingMixin
 
 
-# TODO: Add constraints.
+# TODO: Abstract them.
 class Debugger(object):
     def __new__(cls, environment, backend='gdb'):
         constructor = GDB if backend == 'gdb' else CDB
@@ -87,8 +88,13 @@ class GDB(LoggingMixin):
 
     def get_reg(self, name):
         command = 'info registers {}'.format(name)
-        output = self.execute(command)
-        return output.split()[-2]
+        try:
+            output = self.execute(command)
+        except gdb.error as error:
+            self.logger.error(error)
+            return None
+        else:
+            return output.split()[-2]
 
     def step(self):
         command = 'stepi'
@@ -109,12 +115,17 @@ class GDB(LoggingMixin):
         def repr_stack(stack, sp):
             for line in stack.splitlines():
                 addr, values = line.split(':')
-                values = ' '.join(values.split())
+                values = values.split()
                 if addr == sp:
-                    print(Back.GREEN + red(addr, res=False),
-                          yellow(values))
+                    top = values[0]
+                    rest = ' '.join(values[1:])
+                    line = '==> {} {} {}'.format(
+                        red(addr), red(top, back='green'),
+                        yellow(rest))
                 else:
-                    print(red(addr), cyan(values))
+                    line = '    {} {}'.format(
+                        red(addr), cyan(' '.join(values)))
+                print(line)
         try:
             stack = self.get_stack()
         except IOError as error:
@@ -124,30 +135,37 @@ class GDB(LoggingMixin):
             print()
 
     def print_reg(self):
-        try:
-            ip = self.get_reg(self.env.IP)
-            sp = self.get_reg(self.env.SP)
-            bp = self.get_reg(self.env.BP)
-        except gdb.error as error:
-            self.logger.error(error)
-        else:
-            print('{}: {} {}: {} {}: {}'.format(
-                self.env.IP.upper(), red(ip),
-                self.env.SP.upper(), yellow(sp),
-                self.env.BP.upper(), cyan(bp)))
-            print()
+        def print_regs(regs, colors):
+            values = [self.get_reg(reg) for reg in regs]
+            line = []
+            for reg, value in zip(regs, values):
+                if self.env.BITS == 32:
+                    value = align_32(value)
+                else:
+                    value = align_64(value)
+                value = colors[reg](value)
+                line.append('{}: {}'.format(reg.upper(), value))
+            print('    '.join(line))
+        colors = [red, yellow, cyan]
+        regs = [self.env.CX, self.env.DX, self.env.BX]
+        print_regs(regs, dict(zip(regs, colors)))
+        regs = [self.env.AX, self.env.SI, self.env.DI]
+        print_regs(regs, dict(zip(regs, colors)))
+        regs = [self.env.IP, self.env.SP, self.env.BP]
+        print_regs(regs, dict(zip(regs, colors)))
+        print()
 
     def print_asm(self):
         def repr_asm(asm, pc):
             child = self.gdb.selected_inferior()
             mem = child.read_memory(asm['addr'], asm['length'])
             addr = hex(asm['addr']).strip('L')
-            line = '{:25} {:25} {}'.format(
+            line = '    {:25} {:25} {}'.format(
                 cyan(addr, res=False),
                 green(hexlify(mem).decode('utf-8'), res=False),
                 red(asm['asm']), res=False)
             if asm['addr'] == pc:
-                return Back.GREEN + line
+                return Back.GREEN + '==> ' + line.strip()
             else:
                 return line
         try:

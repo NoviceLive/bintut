@@ -93,7 +93,12 @@ def get_offset(target, name, bits, burst, course):
                 debugger.start(target, [name])
                 logging.error(last_stack)
                 pattern = last_stack.split()[1]
-                offset = pat.locate(pattern)
+                try:
+                    offset = pat.locate(pattern)
+                except (KeyError, UnicodeDecodeError) as error:
+                    logging.error(error)
+                    logging.error('Exiting Gracefully...')
+                    break
                 addr = last_stack.split(':')[0]
                 logging.info('addr: %s', addr)
                 addr = hex(int(addr, 16) + 8)
@@ -120,9 +125,11 @@ def get_offset(target, name, bits, burst, course):
             debugger.step()
         elif '<system>' in eip and burst:
             debugger.cont()
+        elif 'call' in eip:
+            debugger.next()
         else:
             try:
-                debugger.next()
+                debugger.step()
             except KeyboardInterrupt:
                 break
         redisplay(debugger, burst=burst, target=relpath(target),

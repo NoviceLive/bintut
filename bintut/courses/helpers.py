@@ -36,8 +36,12 @@ def align_to_page(addr):
     return hex(int(addr, 16) & ~4095)
 
 
-def align_addr_64(addr):
-    return '{:#018x}'.format(int(addr, 16))
+def align_32(addr):
+    return '{:#010x}'.format(int(addr, 16)) if addr else ''
+
+
+def align_64(addr):
+    return '{:#018x}'.format(int(addr, 16)) if addr else ''
 
 
 # TODO: Make it a class.
@@ -50,7 +54,7 @@ def Addr(func_name, bits=32):
     else:
         raw = gdb.execute('p {}'.format(func_name), to_string=True)
         addr = raw.split()[-2]
-    addr = addr if bits == 32 else align_addr_64(addr)
+    addr = addr if bits == 32 else align_64(addr)
     print(yellow(func_name), red(addr))
     return addr
 

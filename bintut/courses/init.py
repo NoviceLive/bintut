@@ -21,7 +21,7 @@ along with BinTut.  If not, see <http://www.gnu.org/licenses/>.
 from __future__ import division, absolute_import, print_function
 from logging import Formatter, DEBUG, INFO, WARNING, ERROR, CRITICAL
 
-from colorama import Fore, Style
+from colorama import Fore, Back, Style
 
 
 # TODO: Write a wrapper.
@@ -50,7 +50,7 @@ def blue(text, **kwargs):
 
 def color(text, fore='', back='', res=True):
     prefix = fore + Style.BRIGHT if fore else ''
-    prefix += back if back else ''
+    prefix += getattr(Back, back.upper()) if back else ''
     suffix = Style.RESET_ALL if res else ''
     return prefix + text + suffix
 

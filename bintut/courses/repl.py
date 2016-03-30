@@ -81,7 +81,7 @@ class REPL(Cmd, LoggingMixin):
     def default(self, line):
         try:
             output = self.debugger.execute(line)
-        except IOError as error:
+        except Exception as error:
             self.logger.error(error)
         else:
             print(output)
