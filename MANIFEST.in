@@ -1,6 +1,10 @@
 include COPYING.txt
 include requirements.txt
 include SConstruct
+
+include bintut/VERSION.txt
+
 graft sources
+
 include bintut/courses/targets/*
 exclude bintut/courses/targets/*.o

@@ -18,17 +18,24 @@ along with BinTut.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 
+from sys import argv
+from os.path import join, dirname
+
 from setuptools import setup, find_packages
 
 
-__author__ = 'Gu Zhengxiong'
-__version__ = '0.2.1'
-
 PROGRAM_NAME = 'BinTut'
-PACKAGE_NAME = 'bintut'
+PACKAGE_NAME = PROGRAM_NAME.lower()
 
+__author__ = 'Gu Zhengxiong'
 
-with open('requirements.txt') as stream:
+my_dir = dirname(argv[0])
+version_file = 'VERSION.txt'
+version_path = join(my_dir, PACKAGE_NAME, version_file)
+with open(version_path) as stream:
+    __version__ = stream.read()
+
+with open(join(my_dir, 'requirements.txt')) as stream:
     requirements = stream.read().splitlines()
 
 
@@ -36,8 +43,13 @@ setup(
     name=PROGRAM_NAME,
     version=__version__,
     packages=find_packages(),
-    package_data={'bintut.courses.targets': ['nx_off-canary_off-x86',
-                                         'nx_on-canary_off-x86']},
+    package_data={
+        'bintut.courses.targets': [
+            'nx_off-canary_off-x86', 'nx_off-canary_off-x64',
+            'nx_on-canary_off-x86', 'nx_on-canary_off-x64',
+            'winx86.exe'],
+        'bintut': ['VERSION.txt']
+    },
     install_requires=requirements,
     entry_points={
         'console_scripts': [

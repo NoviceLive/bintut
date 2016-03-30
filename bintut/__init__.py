@@ -20,14 +20,17 @@ along with BinTut.  If not, see <http://www.gnu.org/licenses/>.
 
 from __future__ import division, absolute_import, print_function
 
+from pkg_resources import resource_filename
+
 
 __author__ = 'Gu Zhengxiong'
-__version__ = '0.2.1'
 
+version_file = resource_filename(__name__, 'VERSION.txt')
+with open(version_file) as stream:
+    __version__ = stream.read()
 
 PROGRAM_NAME = 'BinTut'
-PACKAGE_NAME = 'bintut'
-
+PACKAGE_NAME = PROGRAM_NAME.lower()
 
 VERSION_PROMPT = (
     '{}\n\nCopyright 2016 {} <rectigu@gmail.com>\n\n'
