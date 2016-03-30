@@ -1,11 +1,47 @@
 BinTut
 ======
 
+
 .. image:: https://img.shields.io/pypi/v/bintut.svg
    :target: https://pypi.python.org/pypi/BinTut
 
+
 Dynamic demonstration of the exploitation of
 classical binary vulnerabilities.
+
+
+What's BinTut
+=============
+
+BinTut is a set of tutorials, **as well as** exercises.
+
+
+Tutorials
+---------
+
+Burst Mode
+++++++++++
+
+Watch and replay to obtain general understanding of the process.
+
+
+Single Mode
++++++++++++
+
+Play and examine various contents carefully
+to acquire comprehensive knowledge of the process.
+
+
+Exercises
+---------
+
+Write exploits that work outside debuggers
+when you understand the principles and techniques
+via watching and replaying, i.e. rewatching,
+careful **playing**, i.e., **Single Mode**,
+and most importantly,
+**reading the source code responsible for exploit generation**,
+which resides in a file named ``exploits.py``.
 
 
 Installation
@@ -155,6 +191,10 @@ Linux x86.
 +++++++++++++++
 
 Linux x86.
+
+This course is not demonstrative enough
+and shall be updated when the author finds a scenario
+where `nop-slide` really stands out.
 
 
 3. ret2lib_

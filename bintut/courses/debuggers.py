@@ -228,13 +228,13 @@ class CDB(LoggingMixin):
         system('cls')
 
     def print_stack(self):
-        sp = self.pykd.reg(self.env.SP)
-        command = 'dd esp-0x40'
+        command = 'dd {}-0x40'.format(self.env.SP)
         try:
             values = self.execute(command)
         except self.pykd.DbgException as error:
             self.logger.error(error)
         else:
+            sp = self.pykd.reg(self.env.SP)
             for line in values.splitlines():
                 if int(line.split()[0], 16) == sp:
                     print(red(line))
@@ -255,13 +255,13 @@ class CDB(LoggingMixin):
                 self.env.BP.upper(), cyan(bp)))
 
     def print_asm(self):
-        command = 'u eip l10'
+        command = 'u {} l10'.format(self.env.IP)
         try:
             asms = self.execute(command)
-            ip = self.pykd.reg(self.env.IP)
         except self.pykd.DbgException as error:
             self.logger.error(error)
         else:
+            ip = self.pykd.reg(self.env.IP)
             for line in asms.splitlines()[1:]:
                 try:
                     address, opcode, ins = line.split(None, 2)
