@@ -19,6 +19,8 @@ BinTut is a set of tutorials, **as well as** exercises.
 Tutorials
 ---------
 
+See the section entitled `Get Started`_ below for more information.
+
 Burst Mode
 ++++++++++
 
@@ -154,6 +156,8 @@ Click_
 Python composable command line utility.
 
 
+.. _`Get Started`:
+
 Get Started
 ===========
 
@@ -172,6 +176,8 @@ via ``bintut --burst 0.1 frame-faking``.
      -l, --list         List available courses.
      -6, --x64          Use x64 courses.
      -b, --burst FLOAT  Use this burst mode interval.  [default: 0]
+     -v, --verbose      Be verbose.
+     -q, --quiet        Be quiet.
      -h, --help         Show this message and exit.
 
 
@@ -194,7 +200,7 @@ Linux x86.
 
 This course is not demonstrative enough
 and shall be updated when the author finds a scenario
-where `nop-slide` really stands out.
+where `nop-slide`_ really stands out.
 
 
 3. ret2lib_
