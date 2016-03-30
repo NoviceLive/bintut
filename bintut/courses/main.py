@@ -34,9 +34,7 @@ from .init import LevelFormatter, red, cyan
 from .utils import select_target
 from .repl import redisplay
 from .debuggers import Debugger
-from .exploits import (
-    Environment, Payload, Fill, Plain, Nop, Shellcode, Ret2Fun,
-    Faked)
+from .exploits import Environment, make_payload
 from .utils import pause
 
 
@@ -73,12 +71,13 @@ def start_tutor(course, bits, burst, level):
     if offset:
         logging.info('\nFound offset: %s', offset)
         payload = make_payload(offset, addr, course, bits)
+        print(type(payload))
         logging.info('Writing payload: %s', name)
         with open(name, 'wb') as stream:
             stream.write(payload)
         # TODO: Implement a pretty printer for humans.
         logging.info('%s Bytes', len(payload))
-        logging.info(payload)
+        logging.info('Payload: %s', payload)
         pause(cyan('Enter to test the payload...'))
         get_offset(target, name, bits, burst, course)
     else:
@@ -143,25 +142,8 @@ def get_offset(target, name, bits, burst, course):
                 debugger.step()
             except KeyboardInterrupt:
                 break
+            except IOError:
+                pass
         redisplay(debugger, burst=burst, target=relpath(target),
                   course=course)
     return None, None
-
-
-# TODO: Make it a class.
-def make_payload(offset, addr, post, bits):
-    if post == 'plain':
-        payload = Fill(offset) + Plain(addr) + Shellcode()
-    elif post == 'nop-slide':
-        payload = Fill(offset) + Plain(addr) + Nop(32) + Shellcode()
-    elif post == 'ret2lib':
-        payload = Fill(offset) + Ret2Fun()
-    elif post == 'frame-faking':
-        payload = (
-            Faked(offset=offset, address=addr) +
-            Faked('system', ['/bin/sh']) +
-            Faked('system', ['/bin/sh']) +
-            Faked('exit', [0]))
-    else:
-        raise ValueError('No such payload!')
-    return payload.payload

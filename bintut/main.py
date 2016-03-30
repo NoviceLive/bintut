@@ -20,7 +20,7 @@ along with BinTut.  If not, see <http://www.gnu.org/licenses/>.
 
 from __future__ import division, absolute_import, print_function
 import logging
-from sys import exit, platform
+from sys import exit
 from subprocess import check_call, CalledProcessError
 from os.path import join
 
@@ -28,6 +28,7 @@ import click
 from pkg_resources import resource_filename
 
 from . import VERSION_PROMPT, PROGRAM_NAME
+from .courses.utils import simple_platform
 from .courses.main import start_tutor
 
 
@@ -71,6 +72,7 @@ def main(course, list_courses, x64, burst, quiet, verbose):
             exit(1)
         bits = 64 if x64 else 32
         path = resource_filename(__name__, '')
+        platform = simple_platform()
         if platform == 'linux':
             entry = join(path, 'entry.py')
             commandline = [

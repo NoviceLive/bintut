@@ -19,8 +19,9 @@ along with BinTut.  If not, see <http://www.gnu.org/licenses/>.
 
 
 from __future__ import division, absolute_import, print_function
-import logging
+from logging import getLogger
 from binascii import unhexlify
+from sys import platform
 import os
 import atexit
 try:
@@ -28,6 +29,19 @@ try:
 except ImportError:
     pass
 from collections import defaultdict
+
+
+logging = getLogger(__name__)
+
+
+def simple_platform():
+    """Fuck."""
+    if platform in ['linux', 'linux2']:
+        return 'linux'
+    elif platform in ['win32']:
+        return 'win32'
+    else:
+        raise ValueError('Unknow platform: {}'.format(platform))
 
 
 def tree():
@@ -43,6 +57,9 @@ class LoggingMixin(object):
 
 # TODO: Find a better way and group with ``bintut -l``.
 def select_target(course, platform, bits):
+    logging.debug('course: %s', course)
+    logging.debug('platform: %s', platform)
+    logging.debug('bits: %s', bits)
     if bits == 64 and course in ['ret2lib', 'frame-faking']:
         raise ValueError('Course only available in x86!')
     courses = tree()
@@ -72,7 +89,7 @@ def p32(addr):
 def pause(message):
     try:
         input(message)
-    except (EOFError, SyntaxError):
+    except (KeyboardInterrupt, SyntaxError, EOFError):
         pass
 
 

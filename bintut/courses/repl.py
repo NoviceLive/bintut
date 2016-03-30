@@ -50,9 +50,8 @@ def redisplay(debugger, burst, course=None, repl=True, target=None):
         try:
             print()
             REPL(debugger).cmdloop()
-        except Exception as error:
-            logging.error(error)
-            exit(1)
+        except KeyboardInterrupt:
+            exit(0)
 
 
 class REPL(Cmd, LoggingMixin):

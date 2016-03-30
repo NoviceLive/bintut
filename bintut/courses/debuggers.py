@@ -97,7 +97,11 @@ class GDB(LoggingMixin):
 
     def step(self):
         command = 'stepi'
-        self.execute(command)
+        try:
+            self.execute(command)
+        except self.gdb.MemoryError as error:
+            self.logger.error(error)
+            raise IOError
 
     def next(self):
         command = 'nexti'
@@ -155,12 +159,19 @@ class GDB(LoggingMixin):
         print()
 
     def print_asm(self):
-        def repr_asm(asm, pc):
+        def repr_asm(name, head, asm, pc):
             child = self.gdb.selected_inferior()
             mem = child.read_memory(asm['addr'], asm['length'])
             addr = hex(asm['addr']).strip('L')
-            line = '    {:25} {:25} {}'.format(
-                cyan(addr, res=False),
+            if name:
+                delta = asm['addr'] - int(head, 16)
+                delta = '<{}+{}>'.format(name, delta)
+                fmt = '    {:20} {:24} {:25} {}'
+            else:
+                delta = ''
+                fmt = '    {:36}{}{:25} {}'
+            line = fmt.format(
+                cyan(addr, res=False), yellow(delta, res=False),
                 green(hexlify(mem).decode('utf-8'), res=False),
                 red(asm['asm']), res=False)
             if asm['addr'] == pc:
@@ -168,10 +179,22 @@ class GDB(LoggingMixin):
             else:
                 return line
         try:
-            frame = self.gdb.selected_frame()
-            arch = frame.architecture()
             ip = self.get_reg(self.env.IP)
+            self.logger.debug('ip: %s', ip)
             pc = int(ip, 16)
+            self.logger.debug('pc: %s', pc)
+        except TypeError as error:
+            self.logger.error(error)
+        try:
+            frame = self.gdb.selected_frame()
+            self.logger.debug('frame: %s', frame)
+            name = frame.name()
+            if name:
+                head = self.execute('p {}'.format(name)).split()[-2]
+            else:
+                head = None
+            self.logger.debug('name: %s head: %s', name, head)
+            arch = frame.architecture()
             asms = arch.disassemble(pc, pc+32)
         except (self.gdb.MemoryError, self.gdb.error) as error:
             self.logger.error(error)
@@ -183,7 +206,7 @@ class GDB(LoggingMixin):
                     just = asms[index]
                     after = asms[index+1:index+1+8]
                     for one in before + [just] + after:
-                        print(repr_asm(one, pc))
+                        print(repr_asm(name, head, one, pc))
                     found = True
                     break
             if not found:
