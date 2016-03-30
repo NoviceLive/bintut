@@ -55,7 +55,11 @@ def start_tutor(course, bits, burst, level):
     logger.addHandler(handler)
     logger.setLevel(level)
 
-    bin_name = select_target(course, Environment.PLATFORM, bits)
+    try:
+        bin_name = select_target(course, Environment.PLATFORM, bits)
+    except ValueError as error:
+        logging.error(error)
+        exit(1)
     root = resource_filename(__name__, '')
     target = realpath(join(root, 'targets', bin_name))
     logging.debug('target: %s', target)
@@ -111,21 +115,28 @@ def get_offset(target, name, bits, burst, course):
                 logging.error('Exiting Gracefully...')
                 break
         try:
-            eip = debugger.get_pc_asm()
+            ip = debugger.get_pc_asm()
         except IOError as error:
             addr, pattern = error.args
-            offset = pat.locate(pattern)
+            try:
+                offset = pat.locate(pattern)
+            except UnicodeDecodeError as error:
+                logging.error(error)
+                logging.error('Exiting Gracefully...')
+                break
             logging.info('addr: %s offset: %s', addr, offset)
             if burst:
                 pass
             else:
                 pause('Enter to return...')
             return offset, addr
-        if 'call' in eip and '<read_file>' in eip:
+        def is_read_file(ip):
+            return '<read_file>' in ip or '(_read_file)' in ip
+        if 'call' in ip and is_read_file(ip):
             debugger.step()
-        elif '<system>' in eip and burst:
+        elif '<system>' in ip and burst:
             debugger.cont()
-        elif 'call' in eip:
+        elif 'call' in ip:
             debugger.next()
         else:
             try:

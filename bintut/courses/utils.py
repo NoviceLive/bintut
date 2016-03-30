@@ -41,18 +41,26 @@ class LoggingMixin(object):
         self.logger = getLogger(self.__class__.__name__)
 
 
+# TODO: Find a better way and group with ``bintut -l``.
 def select_target(course, platform, bits):
-    if course in ['plain', 'nop-slide']:
-        base = 'nx_off-canary_off-'
-    elif course in[
-            'ret2lib', 'esp-lifting', 'frame-faking', 'mprotect',
-            'rop']:
-        base = 'nx_on-canary_off-'
+    if bits == 64 and course in ['ret2lib', 'frame-faking']:
+        raise ValueError('Course only available in x86!')
+    courses = tree()
+    courses['linux']['plain'] = 'nx_off-canary_off-{}'
+    courses['linux']['nop-slide'] = 'nx_off-canary_off-{}'
+    courses['linux']['ret2lib'] = 'nx_on-canary_off-x86'
+    courses['linux']['frame-faking'] = 'nx_on-canary_off-x86'
+    # WARN: Don't use dashes.
+    courses['win32']['plain'] = 'win{}.exe'
+    courses['win32']['nop-slide'] = 'win{}.exe'
+    target = courses[platform][course]
+    try:
+        real = target.format('x86' if bits == 32 else 'x64')
+    except AttributeError as error:
+        logging.error(error)
+        raise ValueError('No such course!')
     else:
-        raise ValueError('Not target for %s', course)
-    abi = 'x86' if bits == 32 else 'x64'
-    ext = '' if platform == 'linux' else '.exe'
-    return '{}{}{}'.format(base, abi, ext)
+        return real
 
 
 # TODO: Make it a class.

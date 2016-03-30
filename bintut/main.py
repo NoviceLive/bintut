@@ -21,7 +21,7 @@ along with BinTut.  If not, see <http://www.gnu.org/licenses/>.
 from __future__ import division, absolute_import, print_function
 import logging
 from sys import exit, platform
-from subprocess import check_call
+from subprocess import check_call, CalledProcessError
 from os.path import join
 
 import click
@@ -31,12 +31,14 @@ from . import VERSION_PROMPT, PROGRAM_NAME
 from .courses.main import start_tutor
 
 
-COURSES = [
-    'plain', 'nop-slide', 'ret2lib',
-    # 'esp-lifting',
-    'frame-faking',
-    # 'mprotect', 'rop'
-]
+# TODO: Find a better solution.
+COURSES = {
+    'plain': 'Return to shellcode.',
+    'nop-slide': 'Return to nops plus shellcode.',
+    'ret2lib': 'Return to library functions.',
+    'frame-faking':
+    'Return to chained library functions via leave_ret gadget.'
+}
 
 
 @click.command(
@@ -56,35 +58,32 @@ COURSES = [
 def main(course, list_courses, x64, burst, quiet, verbose):
     """Teach You A Binary Exploitation For Great Good."""
     if list_courses:
-        print('Available Courses:')
-        print('  ', 'index', 'name')
-        for index, name in enumerate(COURSES):
-            print('    ', index, name)
+        print('Available Courses:\n')
+        for course in ['plain', 'nop-slide', 'ret2lib',
+                       'frame-faking']:
+            print('{:16} {}'.format(course, COURSES[course]))
     elif course:
         level = logging.INFO + (quiet-verbose)*10
-        if course.isdigit():
-            try:
-                name = COURSES[int(course)]
-            except IndexError:
-                print('No Such Courses!')
-                exit(1)
+        if course in COURSES:
+            name = course
         else:
-            if course in COURSES:
-                name = course
-            else:
-                print('No Such Courses!')
-                exit(1)
+            print('No Such Courses!')
+            exit(1)
         bits = 64 if x64 else 32
         path = resource_filename(__name__, '')
         if platform == 'linux':
             entry = join(path, 'entry.py')
-            check_call([
+            commandline = [
                 'gdb', '--quiet', '--batch',
                 '--eval-command', 'pi burst={}'.format(burst),
                 '--eval-command', 'pi course="{}"'.format(course),
                 '--eval-command', 'pi bits={}'.format(bits),
                 '--eval-command', 'pi level={}'.format(level),
-                '--eval-command', 'source {}'.format(entry)])
+                '--eval-command', 'source {}'.format(entry)]
+            try:
+                check_call(commandline)
+            except CalledProcessError:
+                exit(1)
         else:
             start_tutor(course, bits, burst, level)
     exit(0)

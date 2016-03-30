@@ -190,11 +190,15 @@ Available Courses
 1. plain
 ++++++++
 
+Return to shellcode.
+
 Linux x86 / x64.
 
 
 2. `nop-slide`_
 +++++++++++++++
+
+Return to nops plus shellcode.
 
 Linux x86 / x64.
 
@@ -206,13 +210,33 @@ where `nop-slide`_ really stands out.
 3. ret2lib_
 +++++++++++
 
+Return to library functions.
+
 Linux x86.
+
+.. _`Notes for x64`:
+Notes for x64
+*************
+
+The ABI of x64, unlike that of x86, either on Linux or Windows,
+passes some arguments via registers, which may not be controlled
+without resort to certain gadgets.
+
+Therefore, it may be discussed in the section for ROP.
 
 
 4. frame-faking
 +++++++++++++++
 
+Return to chained library functions via leave_ret gadget.
+
 Linux x86.
+
+
+Notes for x64
+*************
+
+See `Notes for x64`_.
 
 
 Bug Reports

@@ -78,11 +78,10 @@ class GDB(LoggingMixin):
             output = self.execute(command)
         except self.gdb.MemoryError as error:
             self.logger.debug('Original error: %s', error)
-            addr = self.get_reg(self.env.SP)
-            self.logger.debug('addr: %s', addr)
+            sp = self.get_reg(self.env.SP)
             pattern = error.args[0].split()[-1]
-            self.logger.debug('pattern: %s', pattern)
-            raise IOError(addr, pattern)
+            self.logger.debug('sp: %s pattern: %s', sp, pattern)
+            raise IOError(sp, pattern)
         else:
             return output
 
@@ -208,11 +207,17 @@ class CDB(LoggingMixin):
         return None
 
     def start(self, filename, args):
+        try:
+            self.pykd.detachProcess()
+        except RuntimeError:
+            pass
         commandline = '{} {}'.format(filename, ' '.join(args))
         self.pykd.startProcess(commandline)
         from os.path import basename, splitext
         base = splitext(basename(filename))[0]
         self.execute('bp {}!main'.format(base))
+        # TODO: Find a better way.
+        self.pykd.go()
         self.pykd.go()
 
     def get_stack(self):
@@ -222,10 +227,12 @@ class CDB(LoggingMixin):
         self.logger.debug('ip: %s', self.get_reg(self.env.IP))
         try:
             output = self.pykd.disasm().opmnemo()
-        except self.pykd.MemoryException as error:
-            raise
         except self.pykd.DbgException as error:
-            self.logger.error(error)
+            self.logger.error('Original error: %s', error)
+            pattern = self.get_reg(self.env.IP)
+            sp = self.get_reg(self.env.SP)
+            self.logger.debug('sp: %s pattern: %s', sp, pattern)
+            raise IOError(sp, pattern)
         else:
             return output
 
