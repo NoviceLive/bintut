@@ -181,14 +181,20 @@ class CDB(LoggingMixin):
 
     def execute(self, line):
         self.logger.debug('line: %s', line)
-        output = self.pykd.dbgCommand(line)
-        return output
+        # TODO: Write special handlers for state-changing commands.
+        if line == 'go':
+            self.pykd.go()
+        else:
+            output = self.pykd.dbgCommand(line)
+            return output
+        return None
 
     def start(self, filename, args):
         commandline = '{} {}'.format(filename, ' '.join(args))
         self.pykd.startProcess(commandline)
-        from os.path import basename
-        self.execute('bp {}!main'.format(basename(filename)))
+        from os.path import basename, splitext
+        base = splitext(basename(filename))[0]
+        self.execute('bp {}!main'.format(base))
         self.pykd.go()
 
     def get_stack(self):
@@ -220,3 +226,52 @@ class CDB(LoggingMixin):
     def clear(self):
         from os import system
         system('cls')
+
+    def print_stack(self):
+        sp = self.pykd.reg(self.env.SP)
+        command = 'dd esp-0x40'
+        try:
+            values = self.execute(command)
+        except self.pykd.DbgException as error:
+            self.logger.error(error)
+        else:
+            for line in values.splitlines():
+                if int(line.split()[0], 16) == sp:
+                    print(red(line))
+                else:
+                    print(cyan(line))
+
+    def print_reg(self):
+        try:
+            ip = hex(self.pykd.getIP()).strip('L')
+            sp = hex(self.pykd.getSP())
+            bp = self.get_reg(self.env.BP)
+        except self.pykd.DbgException as error:
+            self.logger.error(error)
+        else:
+            print('{}: {} {}: {} {}: {}'.format(
+                self.env.IP.upper(), red(ip),
+                self.env.SP.upper(), yellow(sp),
+                self.env.BP.upper(), cyan(bp)))
+
+    def print_asm(self):
+        command = 'u eip l10'
+        try:
+            asms = self.execute(command)
+            ip = self.pykd.reg(self.env.IP)
+        except self.pykd.DbgException as error:
+            self.logger.error(error)
+        else:
+            for line in asms.splitlines()[1:]:
+                try:
+                    address, opcode, ins = line.split(None, 2)
+                except ValueError as error:
+                    print(red('{}: {}'.format(line, error)))
+                else:
+                    line = '{:25} {:25} {}'.format(
+                        cyan(address, res=False),
+                        yellow(opcode, res=False), red(ins))
+                    if int(address, 16) == ip:
+                        print(Back.GREEN + line)
+                    else:
+                        print(line)
