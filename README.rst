@@ -19,7 +19,7 @@ BinTut is a set of tutorials, **as well as** exercises.
 Tutorials
 ---------
 
-See the section entitled `Get Started`_ below for more information.
+See `Get Started`_ for usage information.
 
 Burst Mode
 ++++++++++
@@ -110,7 +110,7 @@ Lastest source from Git works with minor problems.
      sudo apt-get update
      sudo apt-get install libc6:i386
 
-- Clone the lastest source from Git and install requirements.
+- Clone the lastest source code from Git and install requirements.
 
   ::
 
@@ -198,7 +198,7 @@ Linux x86 / x64.
 2. `nop-slide`_
 +++++++++++++++
 
-Return to nops plus shellcode.
+Return to NOPs plus shellcode.
 
 Linux x86 / x64.
 
@@ -218,11 +218,13 @@ Linux x86.
 Notes for x64
 *************
 
-The ABI of x64, unlike that of x86, either on Linux or Windows,
-passes some arguments via registers, which may not be controlled
+Either on Linux or Windows, the `ABI of x64`_, unlike that of x86,
+passes some arguments, first six or four integral arguments
+on Linux or Windows respectively,
+via registers, which may not be controlled
 without resort to certain gadgets.
 
-Therefore, it may be discussed in the section for ROP.
+Therefore, it may be discussed in the section for ROP_.
 
 
 4. frame-faking
@@ -266,3 +268,5 @@ References
 .. _Stack-based buffer overflow: https://en.wikipedia.org/wiki/Stack_buffer_overflow
 .. _nop-slide: https://en.wikipedia.org/wiki/NOP_slide
 .. _ret2lib: https://en.wikipedia.org/wiki/Return-to-libc_attack
+.. _ROP: https://en.wikipedia.org/wiki/Return-oriented_programming
+.. _ABI of x64: https://en.wikipedia.org/wiki/X86_calling_conventions#x86-64_calling_conventions
