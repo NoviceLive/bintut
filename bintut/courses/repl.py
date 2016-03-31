@@ -67,12 +67,17 @@ class REPL(Cmd, LoggingMixin):
         return True
 
     @staticmethod
-    def do_quit(dummy):
-        return True
-
-    @staticmethod
     def emptyline():
         return True
+
+    def do_help(self, line):
+        command = 'help {}'.format(line)
+        try:
+            output = self.debugger.execute(command)
+        except Exception as error:
+            self.logger.error(error)
+        else:
+            print(output)
 
     def do_redis(self, dummy):
         pass

@@ -22,20 +22,15 @@ from __future__ import division, absolute_import, print_function
 from logging import getLogger
 from binascii import unhexlify
 from sys import platform
-import os
-import atexit
-try:
-    import readline
-except ImportError:
-    pass
 from collections import defaultdict
 
 
 logging = getLogger(__name__)
 
 
+# TODO: Use other libraries.
 def simple_platform():
-    """Fuck."""
+    """Simple."""
     if platform in ['linux', 'linux2']:
         return 'linux'
     elif platform in ['win32']:
@@ -91,25 +86,3 @@ def pause(message):
         input(message)
     except (KeyboardInterrupt, SyntaxError, EOFError):
         pass
-
-
-# TODO: Support line editing.
-def setup_read_line(history_dir='.'):
-    """Setup readline.
-
-    For input on Python 3 and raw_input on Python 2.
-    """
-    history = os.path.join(history_dir, 'history')
-    try:
-        readline.parse_and_bind('tab: complete')
-        readline.parse_and_bind('set editing-mode emacs')
-    except NameError:
-        pass
-    try:
-        readline.read_history_file(history)
-    except (NameError, OSError):
-        pass
-    if os.path.isdir(history_dir):
-        atexit.register(readline.write_history_file, history)
-    else:
-        logging.warning('history saving unavailable.')

@@ -30,7 +30,7 @@ PACKAGE_NAME = PROGRAM_NAME.lower()
 __author__ = 'Gu Zhengxiong'
 
 my_dir = dirname(argv[0])
-version_file = 'VERSION.txt'
+version_file = 'version.txt'
 version_path = join(my_dir, PACKAGE_NAME, version_file)
 with open(version_path) as stream:
     __version__ = stream.read()
@@ -48,7 +48,7 @@ setup(
             'nx_off-canary_off-x86', 'nx_off-canary_off-x64',
             'nx_on-canary_off-x86', 'nx_on-canary_off-x64',
             'winx86.exe'],
-        'bintut': ['VERSION.txt']
+        'bintut': [version_file]
     },
     install_requires=requirements,
     entry_points={

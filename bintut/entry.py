@@ -29,4 +29,27 @@ from courses.main import start_tutor
 
 
 if __name__ == '__main__':
+    # This does not seem to work inside GDB Python.
+    from os.path import join, isdir
+    from atexit import register
+    try:
+        import readline
+    except ImportError:
+        pass
+    history_dir = '.'
+    history = join(history_dir, 'history')
+    try:
+        readline.parse_and_bind('tab: complete')
+        readline.parse_and_bind('set editing-mode emacs')
+    except NameError:
+        pass
+    try:
+        readline.read_history_file(history)
+    except (NameError, OSError):
+        pass
+    if isdir(history_dir):
+        register(readline.write_history_file, history)
+    else:
+        pass
+
     start_tutor(course, bits, burst, level)

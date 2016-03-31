@@ -25,7 +25,7 @@ from pkg_resources import resource_filename
 
 __author__ = 'Gu Zhengxiong'
 
-version_file = resource_filename(__name__, 'VERSION.txt')
+version_file = resource_filename(__name__, 'version.txt')
 with open(version_file) as stream:
     __version__ = stream.read()
 

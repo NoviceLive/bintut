@@ -6,8 +6,10 @@ BinTut
    :target: https://pypi.python.org/pypi/BinTut
 
 
-Dynamic demonstration of the exploitation of
-classical binary vulnerabilities.
+Dynamic or live demonstration of exploitation techniques of
+classical memory corruption vulnerabilities,
+from debugging to payload generation and exploitation,
+for educational purposes :yum:.
 
 
 What's BinTut
@@ -21,17 +23,37 @@ Tutorials
 
 See `Get Started`_ for usage information.
 
+If you are a fan of Faiz_, ``Burst Mode`` or ``Single Mode`` should
+sound familiar and inspiring.
+
+
 Burst Mode
 ++++++++++
 
 Watch and replay to obtain general understanding of the process.
 
+Use ``-b / --burst`` to control the interval (in seconds).
+Note that ``-b0`` means ``Single Mode``, which is the default.
+
 
 Single Mode
 +++++++++++
 
-Play and examine various contents carefully
-to acquire comprehensive knowledge of the process.
+Play and examine various contents
+such as the stack, registers or memory addresses,
+carefully and step by step,
+to acquire comprehensive and detailed knowledge of the process.
+
+Use ``Enter`` or ``Ctrl + D`` to step.
+
+You can execute normal GDB_ commands via the promt.
+But note that BinTut won't synchronize the display
+when you execute state-changing commands,
+e.g. ``stepi`` or ``nexti``,
+which are discouraged for the time being.
+
+Another bad news is that readline_ does not work :scream:,
+and I can't figure out the reason :scream:.
 
 
 Exercises
@@ -39,8 +61,8 @@ Exercises
 
 Write exploits that work outside debuggers
 when you understand the principles and techniques
-via watching and replaying, i.e. rewatching,
-careful **playing**, i.e., **Single Mode**,
+via watching and replaying (i.e. rewatching),
+careful **playing** (i.e., **Single Mode**),
 and most importantly,
 **reading the source code responsible for exploit generation**,
 which resides in a file named ``exploits.py``.
@@ -71,7 +93,7 @@ Version 0.2.1 should work fine.
 Fedora_
 +++++++
 
-Fedora_ 23 Workstation comes with GDB with Python 3,
+Fedora_ 23 Workstation comes with GDB_ with Python 3,
 which has been tested
 and BinTut version 0.2.1 is known to work properly
 as in `Arch Linux`_.
@@ -140,6 +162,14 @@ but it's intended to be Python 2 compatible.
 Therefore, when Python 2 yells at you,
 feel free to create an issue or send me a pull request.
 
+Known unresolved issues exist on Python 2
+*****************************************
+
+- Can't display disassembly after returning to shellcode.
+
+- Can't print the payload for some courses.
+
+
 Pat_
 ++++
 
@@ -184,6 +214,9 @@ via ``bintut --burst 0.1 frame-faking``.
 Available Courses
 =================
 
+Other courses might be added later.
+
+
 `Stack-based buffer overflow`_
 ------------------------------
 
@@ -215,6 +248,7 @@ Return to library functions.
 Linux x86.
 
 .. _`Notes for x64`:
+
 Notes for x64
 *************
 
@@ -270,3 +304,5 @@ References
 .. _ret2lib: https://en.wikipedia.org/wiki/Return-to-libc_attack
 .. _ROP: https://en.wikipedia.org/wiki/Return-oriented_programming
 .. _ABI of x64: https://en.wikipedia.org/wiki/X86_calling_conventions#x86-64_calling_conventions
+.. _readline: https://docs.python.org/3/library/readline.html
+.. _Faiz: https://en.wikipedia.org/wiki/Kamen_Rider_555
