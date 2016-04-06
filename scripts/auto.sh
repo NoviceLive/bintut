@@ -14,23 +14,3 @@ for time in {1..4}; do
     printf '%s ' "$(2>&1 setarch $(uname -m) -R ${TARGET})"
     printf '%s\n' "$(2>&1 >/dev/null gdb ${TARGET} --batch -ex 'run')"
 done
-
-
-# Program('auto.c')
-
-
-# # ifndef CPP
-# # include <stdlib.h>
-# # include <stdio.h>
-# # endif
-
-
-# int
-# main(void)
-# {
-#   auto int number;
-
-#   fprintf(stderr, "%p\n", &number);
-
-#   return EXIT_SUCCESS;
-# }

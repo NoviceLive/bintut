@@ -23,10 +23,6 @@ import logging
 from os.path import join, realpath, relpath
 from sys import stderr
 
-try:
-    import gdb
-except ImportError:
-    pass
 from pkg_resources import resource_filename
 from pat import Pat
 
@@ -70,7 +66,7 @@ def start_tutor(course, bits, burst, level):
     offset, addr = get_offset(target, name, bits, burst, course)
     if offset:
         logging.info('\nFound offset: %s', offset)
-        payload = make_payload(offset, addr, course, bits)
+        payload = make_payload(offset, addr, course)
         logging.info('Writing payload: %s', name)
         with open(name, 'wb') as stream:
             stream.write(payload)

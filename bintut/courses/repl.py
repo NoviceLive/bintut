@@ -24,8 +24,6 @@ from sys import exit
 from time import sleep
 from cmd import Cmd
 
-from colorama import Back
-
 from .init import cyan, green, red, yellow
 from .utils import LoggingMixin
 

@@ -1,10 +1,14 @@
 include COPYING.txt
 include requirements.txt
 include SConstruct
+include make.cmd
 
 include bintut/VERSION.txt
 
 graft sources
+graft scripts
 
 include bintut/courses/targets/*
 exclude bintut/courses/targets/*.o
+include miscbin/*
+exclude miscbin/*.o

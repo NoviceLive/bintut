@@ -56,9 +56,7 @@ def main(course, list_courses, x64, burst, quiet, verbose):
             print('{:16} {}'.format(course, courses[course]))
     elif course:
         level = logging.INFO + (quiet-verbose)*10
-        if course in courses:
-            name = course
-        else:
+        if course not in courses:
             print('No Such Courses!')
             exit(1)
         bits = 64 if x64 else 32
@@ -83,18 +81,18 @@ def main(course, list_courses, x64, burst, quiet, verbose):
 
 
 def make_courses():
-    COURSES = OrderedDict()
-    COURSES.update({
+    courses = OrderedDict()
+    courses.update({
         'plain': 'Return to plain shellcode. (Linux x86 / x64.)'})
-    COURSES.update({
+    courses.update({
         'nop-slide':
         'Return to NOPs plus shellcode. (Linux x86 / x64.)'})
-    COURSES.update({
+    courses.update({
         'jmp-esp':
         'Return to shellcode via JMP ESP / RSP. (Linux x86 / x64.)'})
-    COURSES.update({
+    courses.update({
         'ret2lib': 'Return to functions. (Linux x86.)'})
-    COURSES.update({
+    courses.update({
         'frame-faking':
         'Return to chained functions via LEAVE RET. (Linux x86.)'})
-    return COURSES
+    return courses

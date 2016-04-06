@@ -49,23 +49,12 @@ def align_64(addr):
 def Addr(func_name, bits=32):
     if func_name == '/bin/sh':
         addr = get_bin_sh_str(bits)
-    elif func_name == 'leave_ret':
-        addr = get_leave_ret_gadget()
     else:
         raw = gdb.execute('p {}'.format(func_name), to_string=True)
         addr = raw.split()[-2]
     addr = addr if bits == 32 else align_64(addr)
     print(yellow(func_name), red(addr))
     return addr
-
-
-def get_leave_ret_gadget():
-    # TODO: Remove hardcoded ad-hoc behaviors.
-    # TODO: Use other libraries.
-    leave = gdb.execute('disas read_file',
-                        to_string=True).splitlines()[-3]
-    gadget = leave.split()[0]
-    return gadget
 
 
 def get_bin_sh_str(bits):
@@ -76,12 +65,3 @@ def get_bin_sh_str(bits):
     found = gdb.execute(command, to_string=True)
     bin_sh = found.splitlines()[0]
     return bin_sh
-
-
-def get_bits():
-    name = gdb.selected_frame().architecture().name()
-    return 32 if name == 'i386' else 64
-
-
-def get_size_of_pointer():
-    return 4 if get_bits() == 32 else 8

@@ -21,7 +21,7 @@ along with BinTut.  If not, see <http://www.gnu.org/licenses/>.
 from __future__ import division, absolute_import, print_function
 from logging import getLogger
 from binascii import unhexlify
-from sys import platform
+from sys import platform as sys_platform
 from collections import defaultdict
 
 
@@ -31,12 +31,12 @@ logging = getLogger(__name__)
 # TODO: Use other libraries.
 def simple_platform():
     """Simple."""
-    if platform in ['linux', 'linux2']:
+    if sys_platform in ['linux', 'linux2']:
         return 'linux'
-    elif platform in ['win32']:
+    elif sys_platform in ['win32']:
         return 'win32'
     else:
-        raise ValueError('Unknow platform: {}'.format(platform))
+        raise ValueError('Unknow platform: {}'.format(sys_platform))
 
 
 def tree():
@@ -46,7 +46,6 @@ def tree():
 # TODO: Use other methods.
 class LoggingMixin(object):
     def __init__(self):
-        from logging import getLogger
         self.logger = getLogger(self.__class__.__name__)
 
 
