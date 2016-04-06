@@ -71,7 +71,6 @@ def start_tutor(course, bits, burst, level):
     if offset:
         logging.info('\nFound offset: %s', offset)
         payload = make_payload(offset, addr, course, bits)
-        print(type(payload))
         logging.info('Writing payload: %s', name)
         with open(name, 'wb') as stream:
             stream.write(payload)

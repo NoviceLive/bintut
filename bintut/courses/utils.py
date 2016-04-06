@@ -60,6 +60,7 @@ def select_target(course, platform, bits):
     courses = tree()
     courses['linux']['plain'] = 'nx_off-canary_off-{}'
     courses['linux']['nop-slide'] = 'nx_off-canary_off-{}'
+    courses['linux']['jmp-esp'] = 'nx_off-canary_off-{}'
     courses['linux']['ret2lib'] = 'nx_on-canary_off-x86'
     courses['linux']['frame-faking'] = 'nx_on-canary_off-x86'
     # WARN: Don't use dashes.

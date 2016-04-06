@@ -162,12 +162,19 @@ but it's intended to be Python 2 compatible.
 Therefore, when Python 2 yells at you,
 feel free to create an issue or send me a pull request.
 
-Known unresolved issues exist on Python 2
-*****************************************
+Known unresolved issues existing on Python 2
+********************************************
 
 - Can't display disassembly after returning to shellcode.
 
 - Can't print the payload for some courses.
+
+
+Ropper_
++++++++
+
+Show information about binary files and find gadgets to
+build rop chains for different architectures.
 
 
 Pat_
@@ -223,7 +230,7 @@ Other courses might be added later.
 1. plain
 ++++++++
 
-Return to shellcode.
+Return to plain shellcode.
 
 Linux x86 / x64.
 
@@ -240,10 +247,18 @@ and shall be updated when the author finds a scenario
 where `nop-slide`_ really stands out.
 
 
-3. ret2lib_
+3. jmp-esp
+++++++++++
+
+Return to shellcode via JMP ESP / RSP.
+
+Linux x86 / x64.
+
+
+4. ret2lib_
 +++++++++++
 
-Return to library functions.
+Return to functions.
 
 Linux x86.
 
@@ -261,10 +276,10 @@ without resort to certain gadgets.
 Therefore, it may be discussed in the section for ROP_.
 
 
-4. frame-faking
+5. frame-faking
 +++++++++++++++
 
-Return to chained library functions via leave_ret gadget.
+Return to chained functions via LEAVE RET gadget.
 
 Linux x86.
 
@@ -295,10 +310,13 @@ References
 .. _Arch Linux: https://www.archlinux.org/
 .. _Fedora: https://getfedora.org/
 .. _Debian: https://www.debian.org/
+
 .. _GDB: http://www.gnu.org/software/gdb/
+.. _Ropper: https://github.com/sashs/Ropper
 .. _Pat: https://github.com/NoviceLive/pat
 .. _Colorama: https://github.com/tartley/colorama
 .. _Click: https://github.com/mitsuhiko/click
+
 .. _Stack-based buffer overflow: https://en.wikipedia.org/wiki/Stack_buffer_overflow
 .. _nop-slide: https://en.wikipedia.org/wiki/NOP_slide
 .. _ret2lib: https://en.wikipedia.org/wiki/Return-to-libc_attack

@@ -23,6 +23,7 @@ import logging
 from sys import exit
 from subprocess import check_call, CalledProcessError
 from os.path import join
+from collections import OrderedDict
 
 import click
 from pkg_resources import resource_filename
@@ -30,16 +31,6 @@ from pkg_resources import resource_filename
 from . import VERSION_PROMPT, PROGRAM_NAME
 from .courses.utils import simple_platform
 from .courses.main import start_tutor
-
-
-# TODO: Find a better solution.
-COURSES = {
-    'plain': 'Return to shellcode.',
-    'nop-slide': 'Return to nops plus shellcode.',
-    'ret2lib': 'Return to library functions.',
-    'frame-faking':
-    'Return to chained library functions via leave_ret gadget.'
-}
 
 
 @click.command(
@@ -58,14 +49,14 @@ COURSES = {
 @click.option('-q', '--quiet', count=True, help='Be quiet.')
 def main(course, list_courses, x64, burst, quiet, verbose):
     """Teach You A Binary Exploitation For Great Good."""
+    courses = make_courses()
     if list_courses:
         print('Available Courses:\n')
-        for course in ['plain', 'nop-slide', 'ret2lib',
-                       'frame-faking']:
-            print('{:16} {}'.format(course, COURSES[course]))
+        for course in courses:
+            print('{:16} {}'.format(course, courses[course]))
     elif course:
         level = logging.INFO + (quiet-verbose)*10
-        if course in COURSES:
+        if course in courses:
             name = course
         else:
             print('No Such Courses!')
@@ -89,3 +80,21 @@ def main(course, list_courses, x64, burst, quiet, verbose):
         else:
             start_tutor(course, bits, burst, level)
     exit(0)
+
+
+def make_courses():
+    COURSES = OrderedDict()
+    COURSES.update({
+        'plain': 'Return to plain shellcode. (Linux x86 / x64.)'})
+    COURSES.update({
+        'nop-slide':
+        'Return to NOPs plus shellcode. (Linux x86 / x64.)'})
+    COURSES.update({
+        'jmp-esp':
+        'Return to shellcode via JMP ESP / RSP. (Linux x86 / x64.)'})
+    COURSES.update({
+        'ret2lib': 'Return to functions. (Linux x86.)'})
+    COURSES.update({
+        'frame-faking':
+        'Return to chained functions via LEAVE RET. (Linux x86.)'})
+    return COURSES
