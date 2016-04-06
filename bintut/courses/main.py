@@ -26,10 +26,9 @@ from sys import stderr
 from pkg_resources import resource_filename
 from pat import Pat
 
-from .init import LevelFormatter, red, cyan
+from .init import LevelFormatter, cyan
 from .utils import select_target
 from .repl import redisplay
-from .debuggers import Debugger
 from .exploits import Environment, make_payload
 from .utils import pause
 

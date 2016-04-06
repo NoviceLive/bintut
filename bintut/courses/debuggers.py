@@ -32,8 +32,15 @@ except ImportError:
 from colorama import Back
 
 from .init import cyan, green, red, yellow
-from .helpers import align_32, align_64
 from .utils import LoggingMixin
+
+
+def align_32(addr):
+    return '{:#010x}'.format(int(addr, 16)) if addr else ''
+
+
+def align_64(addr):
+    return '{:#018x}'.format(int(addr, 16)) if addr else ''
 
 
 # TODO: Abstract them.
