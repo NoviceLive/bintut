@@ -38,8 +38,8 @@ pat = Pat()
 debugger = None
 
 
-def start_tutor(course, bits, burst, level):
-    Environment(bits=bits)
+def start_tutor(course, bits, burst, aslr, level):
+    Environment(bits=bits, aslr=aslr)
     global debugger
     debugger = Environment.debugger
 

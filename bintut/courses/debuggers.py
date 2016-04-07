@@ -55,8 +55,10 @@ class GDB(LoggingMixIn):
         self.env = environment
         self.gdb.execute('set pagination off')
         self.gdb.execute('set disassembly-flavor intel')
-        # TODO: Remove this for ASLR-bypassing courses.
-        self.gdb.execute('set disable-randomization on')
+        if self.env.ASLR:
+            self.gdb.execute('set disable-randomization off')
+        else:
+            self.gdb.execute('set disable-randomization on')
 
     def execute(self, line):
         self.logger.debug('line: %s', line)

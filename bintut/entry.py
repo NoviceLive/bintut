@@ -52,4 +52,4 @@ if __name__ == '__main__':
     else:
         pass
 
-    start_tutor(course, bits, burst, level)
+    start_tutor(course, bits, burst, aslr, level)

@@ -41,13 +41,15 @@ from .courses.main import start_tutor
               help='List available courses.')
 @click.option('-6', '--x64', is_flag=True,
               help='Use x64 courses.')
+@click.option('-A', '--aslr', is_flag=True,
+              help='Enable ASLR.')
 @click.option('-b', '--burst',
               type=float, default=0, show_default=True,
               help='Use this burst mode interval.')
 @click.argument('course', required=False)
 @click.option('-v', '--verbose', count=True, help='Be verbose.')
 @click.option('-q', '--quiet', count=True, help='Be quiet.')
-def main(course, list_courses, x64, burst, quiet, verbose):
+def main(course, list_courses, x64, aslr, burst, quiet, verbose):
     """Teach You A Binary Exploitation For Great Good."""
     courses = make_courses()
     if list_courses:
@@ -68,6 +70,7 @@ def main(course, list_courses, x64, burst, quiet, verbose):
                 'gdb', '--quiet', '--batch',
                 '--eval-command', 'pi burst={}'.format(burst),
                 '--eval-command', 'pi course="{}"'.format(course),
+                '--eval-command', 'pi aslr={}'.format(aslr),
                 '--eval-command', 'pi bits={}'.format(bits),
                 '--eval-command', 'pi level={}'.format(level),
                 '--eval-command', 'source {}'.format(entry)]

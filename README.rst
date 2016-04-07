@@ -234,6 +234,12 @@ Return to plain shellcode.
 
 Linux x86 / x64.
 
+NX: Disabled.
+
+ASLR: Disabled.
+
+Stack Protector: Disabled.
+
 
 2. `nop-slide`_
 +++++++++++++++
@@ -241,6 +247,12 @@ Linux x86 / x64.
 Return to NOPs plus shellcode.
 
 Linux x86 / x64.
+
+NX: Disabled.
+
+ASLR: Disabled.
+
+Stack Protector: Disabled.
 
 This course is not demonstrative enough
 and shall be updated when the author finds a scenario
@@ -254,6 +266,12 @@ Return to shellcode via JMP ESP / RSP.
 
 Linux x86 / x64.
 
+NX: Disabled.
+
+ASLR: Disabled.
+
+Stack Protector: Disabled.
+
 
 4. ret2lib_
 +++++++++++
@@ -261,6 +279,12 @@ Linux x86 / x64.
 Return to functions.
 
 Linux x86.
+
+NX: **Enabled**.
+
+ASLR: Disabled.
+
+Stack Protector: Disabled.
 
 .. _`Notes for x64`:
 
@@ -282,6 +306,12 @@ Therefore, it may be discussed in the section for ROP_.
 Return to chained functions via LEAVE RET gadget.
 
 Linux x86.
+
+NX: **Enabled**.
+
+ASLR: Disabled.
+
+Stack Protector: Disabled.
 
 
 Notes for x64
