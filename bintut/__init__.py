@@ -27,7 +27,7 @@ __author__ = 'Gu Zhengxiong'
 
 version_file = resource_filename(__name__, 'version.txt')
 with open(version_file) as stream:
-    __version__ = stream.read()
+    __version__ = stream.read().strip()
 
 PROGRAM_NAME = 'BinTut'
 PACKAGE_NAME = PROGRAM_NAME.lower()

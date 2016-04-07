@@ -6,8 +6,8 @@ BinTut
    :target: https://pypi.python.org/pypi/BinTut
 
 
-Dynamic or live demonstration of exploitation techniques of
-classical memory corruption vulnerabilities,
+Dynamic or live demonstration of classical exploitation techniques
+of typical memory corruption vulnerabilities,
 from debugging to payload generation and exploitation,
 for educational purposes :yum:.
 
@@ -176,6 +176,11 @@ Ropper_
 Show information about binary files and find gadgets to
 build rop chains for different architectures.
 
+pyelftools_
++++++++++++
+
+Python library for analyzing ELF files
+and DWARF debugging information.
 
 Pat_
 ++++
@@ -212,6 +217,7 @@ via ``bintut --burst 0.1 frame-faking``.
      -V, --version      Show the version and exit.
      -l, --list         List available courses.
      -6, --x64          Use x64 courses.
+     -A, --aslr         Enable ASLR.
      -b, --burst FLOAT  Use this burst mode interval.  [default: 0]
      -v, --verbose      Be verbose.
      -q, --quiet        Be quiet.
@@ -343,6 +349,7 @@ References
 
 .. _GDB: http://www.gnu.org/software/gdb/
 .. _Ropper: https://github.com/sashs/Ropper
+.. _pyelftools: https://github.com/eliben/pyelftools
 .. _Pat: https://github.com/NoviceLive/pat
 .. _Colorama: https://github.com/tartley/colorama
 .. _Click: https://github.com/mitsuhiko/click
