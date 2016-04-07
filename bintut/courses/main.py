@@ -22,6 +22,7 @@ from __future__ import division, absolute_import, print_function
 import logging
 from os.path import join, realpath, relpath
 from sys import stderr
+from binascii import hexlify
 
 from pkg_resources import resource_filename
 from pat import Pat
@@ -67,11 +68,15 @@ def start_tutor(course, bits, burst, level):
         logging.info('\nFound offset: %s', offset)
         payload = make_payload(offset, addr, course)
         logging.info('Writing payload: %s', name)
+        count = payload.count(b'\00')
+        if count:
+            logging.warning('Payload contains %s NULL bytes!', count)
         with open(name, 'wb') as stream:
             stream.write(payload)
         # TODO: Implement a pretty printer for humans.
         logging.info('%s Bytes', len(payload))
         logging.info('Payload: %s', payload)
+        logging.info('Hexlified: %s', hexlify(payload))
         pause(cyan('Enter to test the payload...'))
         get_offset(target, name, bits, burst, course)
     else:
