@@ -51,11 +51,11 @@ def select_target(course, platform, bits):
     if bits == 64 and course in ['ret2lib', 'frame-faking']:
         raise ValueError('Course only available in x86!')
     courses = tree()
-    courses['linux']['plain'] = 'nx_off-canary_off-{}'
-    courses['linux']['nop-slide'] = 'nx_off-canary_off-{}'
-    courses['linux']['jmp-esp'] = 'nx_off-canary_off-{}'
-    courses['linux']['ret2lib'] = 'nx_on-canary_off-x86'
-    courses['linux']['frame-faking'] = 'nx_on-canary_off-x86'
+    courses['linux']['plain'] = 'fread-nx_off-canary_off-{}'
+    courses['linux']['nop-slide'] = 'fread-nx_off-canary_off-{}'
+    courses['linux']['jmp-esp'] = 'fread-nx_off-canary_off-{}'
+    courses['linux']['ret2lib'] = 'fread-nx_on-canary_off-x86'
+    courses['linux']['frame-faking'] = 'fread-nx_on-canary_off-x86'
     # WARN: Don't use dashes.
     courses['win32']['plain'] = 'win{}.exe'
     courses['win32']['nop-slide'] = 'win{}.exe'
