@@ -11,3 +11,4 @@ build
 .gdb_history
 peda-session-*
 history
+*.dot

@@ -31,8 +31,7 @@ except ImportError:
     pass
 from colorama import Back
 
-from .init import cyan, green, red, yellow
-from .utils import LoggingMixin
+from .init import LoggingMixIn, cyan, green, red, yellow
 
 
 def align_32(addr):
@@ -50,9 +49,8 @@ class Debugger(object):
         return constructor(environment)
 
 
-class GDB(LoggingMixin):
+class GDB(LoggingMixIn):
     def __init__(self, environment):
-        LoggingMixin.__init__(self)
         self.gdb = gdb
         self.env = environment
         self.gdb.execute('set pagination off')
@@ -220,9 +218,8 @@ class GDB(LoggingMixin):
                 raise RuntimeError('pc not found')
 
 
-class CDB(LoggingMixin):
+class CDB(LoggingMixIn):
     def __init__(self, environment):
-        LoggingMixin.__init__(self)
         self.pykd = pykd
         self.env = environment
 

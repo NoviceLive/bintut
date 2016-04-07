@@ -43,12 +43,6 @@ def tree():
     return defaultdict(tree)
 
 
-# TODO: Use other methods.
-class LoggingMixin(object):
-    def __init__(self):
-        self.logger = getLogger(self.__class__.__name__)
-
-
 # TODO: Find a better way and group with ``bintut -l``.
 def select_target(course, platform, bits):
     logging.debug('course: %s', course)

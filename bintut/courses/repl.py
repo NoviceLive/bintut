@@ -24,8 +24,7 @@ from sys import exit
 from time import sleep
 from cmd import Cmd
 
-from .init import cyan, green, red, yellow
-from .utils import LoggingMixin
+from .init import LoggingMixIn, cyan, green, red, yellow
 
 
 logging = getLogger(__name__)
@@ -52,12 +51,11 @@ def redisplay(debugger, burst, course=None, repl=True, target=None):
             exit(0)
 
 
-class REPL(Cmd, LoggingMixin):
+class REPL(Cmd, LoggingMixIn):
     prompt = yellow('>>> ')
 
     def __init__(self, debugger):
         Cmd.__init__(self)
-        LoggingMixin.__init__(self)
         self.debugger = debugger
 
     @staticmethod

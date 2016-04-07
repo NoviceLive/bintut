@@ -19,9 +19,16 @@ along with BinTut.  If not, see <http://www.gnu.org/licenses/>.
 
 
 from __future__ import division, absolute_import, print_function
-from logging import Formatter, DEBUG, INFO, WARNING, ERROR, CRITICAL
+from logging import (
+    getLogger, Formatter, DEBUG, INFO, WARNING, ERROR, CRITICAL)
 
 from colorama import Fore, Back, Style
+
+
+class LoggingMixIn(object):
+    @property
+    def logger(self):
+        return getLogger(self.__class__.__name__)
 
 
 # TODO: Write a wrapper.
