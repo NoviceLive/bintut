@@ -19,6 +19,7 @@ along with BinTut.  If not, see <http://www.gnu.org/licenses/>.
 
 
 from __future__ import division, absolute_import, print_function
+from logging import getLogger
 from binascii import hexlify
 
 try:
@@ -33,12 +34,16 @@ from colorama import Back
 
 from .init import LoggingMixIn, cyan, green, red, yellow
 
+logging = getLogger(__name__)
+
 
 def align_32(addr):
+    logging.debug('addr: %s', addr)
     return '{:#010x}'.format(int(addr, 16)) if addr else ''
 
 
 def align_64(addr):
+    logging.debug('addr: %s', addr)
     return '{:#018x}'.format(int(addr, 16)) if addr else ''
 
 

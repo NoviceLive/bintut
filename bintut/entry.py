@@ -48,8 +48,9 @@ if __name__ == '__main__':
     except (NameError, OSError):
         pass
     if isdir(history_dir):
-        register(readline.write_history_file, history)
-    else:
-        pass
+        try:
+            register(readline.write_history_file, history)
+        except NameError:
+            pass
 
     start_tutor(course, bits, burst, aslr, level)

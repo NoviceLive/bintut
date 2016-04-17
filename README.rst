@@ -138,7 +138,7 @@ Lastest source from Git works with minor problems.
 
      git clone https://github.com/NoviceLive/bintut.git
      cd bintut
-     sudo apt-get install python-pip
+     sudo apt-get install python-pip gdb
      pip2 install -r requirements.txt
 
 - Run it without installation.
