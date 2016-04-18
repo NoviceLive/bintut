@@ -45,8 +45,9 @@ setup(
     packages=find_packages(),
     package_data={
         'bintut.courses.targets': [
-            'nx_off-canary_off-x86', 'nx_off-canary_off-x64',
-            'nx_on-canary_off-x86', 'nx_on-canary_off-x64',
+            'fread-nx_off-canary_off-x86', 'fread-nx_off-canary_off-x64',
+            'fread-nx_on-canary_off-x86', 'fread-nx_on-canary_off-x64',
+            'df-nx_off-canary_off-x86',
             'winx86.exe'],
         'bintut': [version_file]
     },
