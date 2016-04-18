@@ -2,8 +2,6 @@ click
 colorama
 pat
 
-capstone
-filebytes
 ropper
 
 pyelftools
