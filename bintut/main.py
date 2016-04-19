@@ -30,7 +30,6 @@ from pkg_resources import resource_filename
 
 from . import VERSION_PROMPT, PROGRAM_NAME
 from .courses.utils import simple_platform
-from .courses.main import start_tutor
 
 
 @click.command(
@@ -64,6 +63,7 @@ def main(course, list_courses, x64, aslr, burst, quiet, verbose):
         bits = 64 if x64 else 32
         path = resource_filename(__name__, '')
         platform = simple_platform()
+        logging.debug('platform: %s', platform)
         if platform == 'linux':
             entry = join(path, 'entry.py')
             commandline = [
@@ -79,6 +79,7 @@ def main(course, list_courses, x64, aslr, burst, quiet, verbose):
             except CalledProcessError:
                 exit(1)
         else:
+            from .courses.main import start_tutor
             start_tutor(course, bits, burst, level)
     exit(0)
 

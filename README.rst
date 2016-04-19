@@ -71,6 +71,18 @@ which resides in a file named ``exploits.py``.
 Installation
 ============
 
+Notice
+------
+
+If pip_ is used to install BinTut,
+make sure that you use the pip_ version
+corresponding to the Python_ version shipped with GDB_.
+For more details, see `#1`_.
+
+Python_ binding of Capstone_ and filebytes_
+might have to be installed manually before Ropper_ can be installed.
+
+
 ``pip install bintut`` may or may not work for the time being.
 
 Therefore it's recommended to just clone this repository
@@ -85,17 +97,17 @@ Tested Platforms
 `Arch Linux`_
 +++++++++++++
 
-Current version of `Arch Linux`_ ships GDB_ with Python 3,
+Current version of `Arch Linux`_ ships GDB_ with Python_ 3,
 in which I developed BinTut.
 
-Version 0.2.1 should work fine.
+The lastest release version should work fine.
 
 Fedora_
 +++++++
 
-Fedora_ 23 Workstation comes with GDB_ with Python 3,
+Fedora_ 23 Workstation comes with GDB_ with Python_ 3,
 which has been tested
-and BinTut version 0.2.1 is known to work properly
+and BinTut is known to work properly
 as in `Arch Linux`_.
 
 - Install ``glibc.i686`` to support 32-bit programs if needed.
@@ -119,8 +131,7 @@ as in `Arch Linux`_.
 Debian_
 +++++++
 
-GDB_ from the stable branch of Debian_ ships with Python 2,
-where BinTut 0.2.1 does not work.
+GDB_ from the stable branch of Debian_ ships with Python_ 2.
 
 Lastest source from Git works with minor problems.
 
@@ -154,16 +165,16 @@ Requirements
 GDB_
 ++++
 
-Python scripting support is required.
+Python_ scripting support is required.
 
-BinTut is developed with Python 3,
-but it's intended to be Python 2 compatible.
+BinTut is developed with Python_ 3,
+but it's intended to be Python_ 2 compatible.
 
-Therefore, when Python 2 yells at you,
+Therefore, when Python_ 2 yells at you,
 feel free to create an issue or send me a pull request.
 
-Known unresolved issues existing on Python 2
-********************************************
+Known unresolved issues existing on Python_ 2
+*********************************************
 
 - Can't display disassembly after returning to shellcode.
 
@@ -334,6 +345,12 @@ Create `issues <https://github.com/NoviceLive/bintut/issues>`_.
 BinTut may or may not work on your system,
 but bug reports with necessary information are always welcome.
 
+Tips
+----
+
+Submit the verbose log (``stderr``) if you are just out of words,
+e.g., ``bintut -v -b0.1 frame-faking 2>log.txt``.
+
 
 References
 ==========
@@ -346,6 +363,12 @@ References
 .. _Arch Linux: https://www.archlinux.org/
 .. _Fedora: https://getfedora.org/
 .. _Debian: https://www.debian.org/
+
+.. _pip: https://pip.pypa.io/
+.. _Python: https://www.python.org/
+.. _Capstone: http://www.capstone-engine.org/
+.. _filebytes: https://github.com/sashs/filebytes
+.. _#1: https://github.com/NoviceLive/bintut/issues/1
 
 .. _GDB: http://www.gnu.org/software/gdb/
 .. _Ropper: https://github.com/sashs/Ropper
