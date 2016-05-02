@@ -31,7 +31,7 @@ from .init import LevelFormatter, cyan
 from .utils import select_target
 from .repl import redisplay
 from .exploits import Environment, make_payload
-from .utils import pause
+from .utils import pause, get_libc_path
 
 
 pat = Pat()
@@ -56,7 +56,9 @@ def start_tutor(course, bits, burst, aslr, level):
         exit(1)
     root = resource_filename(__name__, '')
     target = realpath(join(root, 'targets', bin_name))
+    Environment.LIBC_PATH = get_libc_path(target)
     logging.debug('target: %s', target)
+    logging.debug('libc: %s', Environment.LIBC_PATH)
 
     name = '{}-{}.bin'.format(course, 'x86' if bits == 32 else 'x64')
     name = realpath(name)

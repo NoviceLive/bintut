@@ -23,10 +23,22 @@ from logging import getLogger
 from binascii import unhexlify
 from sys import platform as sys_platform
 from collections import defaultdict
+from subprocess import check_output
+from os.path import realpath
 
 
 logging = getLogger(__name__)
 
+
+def get_libc_path(elf):
+    output = check_output(['ldd', elf], universal_newlines=True)
+    for line in output.splitlines():
+        if 'libc.so.6' in line:
+            path = line.split()[2]
+            break
+    else:
+        raise RuntimeError('Failed to find the path to libc.')
+    return realpath(path)
 
 # TODO: Use other libraries.
 def simple_platform():
