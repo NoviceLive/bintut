@@ -89,13 +89,13 @@ BinTut does not work inside virtualenv at present.
 Tested Platforms
 ----------------
 
-`Arch Linux`_
-+++++++++++++
+`Arch GNU/Linux`_
++++++++++++++++++
 
 Current version of `Arch Linux`_ ships GDB_ with Python_ 3,
 in which I developed BinTut.
 
-The lastest release version should work fine.
+The latest release version should work fine.
 
 - Enable ``multilib`` in ``/etc/pacman.conf``.
 
@@ -123,10 +123,10 @@ The lastest release version should work fine.
 
      bintut -b0.1 jmp-esp
 
-Fedora_
-+++++++
+`Fedora GNU/Linux`_
++++++++++++++++++++
 
-Fedora_ 23 Workstation comes with GDB_ with Python_ 3,
+The latest Fedora Workstation comes with GDB_ with Python_ 3,
 which has been tested
 and BinTut is known to work properly
 as in `Arch Linux`_.
@@ -149,12 +149,12 @@ as in `Arch Linux`_.
 
      bintut -b0.1 frame-faking
 
-Debian_
-+++++++
+`Debian GNU/Linux`_
++++++++++++++++++++
 
 GDB_ from the stable branch of Debian_ ships with Python_ 2.
 
-Lastest source from Git works with minor problems.
+Latest source from Git works with minor problems.
 
 - Add support to 32-bit programs if necessary.
 
@@ -164,7 +164,7 @@ Lastest source from Git works with minor problems.
      sudo apt-get update
      sudo apt-get install libc6:i386
 
-- Clone the lastest source code from Git and install requirements.
+- Clone the latest source code from Git and install requirements.
 
   ::
 
@@ -180,10 +180,10 @@ Lastest source from Git works with minor problems.
      python2 ./bintut.py -b0.1 frame-faking
 
 
-Kali_
-+++++
+`Kali GNU/Linux`_
++++++++++++++++++
 
-GDB_ from the lastest rolling version of Kali_ ships with Python_ 3.
+GDB_ from the latest rolling version of Kali_ ships with Python_ 3.
 
 - Enable ``i386`` support according to aforementioned instructions.
 
@@ -193,7 +193,7 @@ GDB_ from the lastest rolling version of Kali_ ships with Python_ 3.
 
      apt-get install python3-pip
 
-- Install the lastest BinTut release using ``pip3``
+- Install the latest BinTut release using ``pip3``
 
   ::
 
@@ -471,10 +471,10 @@ References
 - `Advanced return-into-lib(c) exploits (PaX case study) <http://phrack.org/issues/58/4.html#article>`_
 
 
-.. _Arch Linux: https://www.archlinux.org/
-.. _Fedora: https://getfedora.org/
-.. _Debian: https://www.debian.org/
-.. _Kali: https://www.kali.org/
+.. _Arch GNU/Linux: https://www.archlinux.org/
+.. _Fedora GNU/Linux: https://getfedora.org/
+.. _Debian GNU/Linux: https://www.debian.org/
+.. _Kali GNU/Linux: https://www.kali.org/
 
 .. _pip: https://pip.pypa.io/
 .. _Python: https://www.python.org/
