@@ -5,7 +5,6 @@ BinTut
 .. image:: https://img.shields.io/pypi/v/bintut.svg
    :target: https://pypi.python.org/pypi/BinTut
 
-
 Dynamic or live demonstration of classical exploitation techniques
 of typical memory corruption vulnerabilities,
 from debugging to payload generation and exploitation,
@@ -17,7 +16,6 @@ What's BinTut
 
 BinTut is a set of tutorials, **as well as** exercises.
 
-
 Tutorials
 ---------
 
@@ -26,7 +24,6 @@ See `Get Started`_ for usage information.
 If you are a fan of Faiz_, ``Burst Mode`` or ``Single Mode`` should
 sound familiar and inspiring.
 
-
 Burst Mode
 ++++++++++
 
@@ -34,7 +31,6 @@ Watch and replay to obtain general understanding of the process.
 
 Use ``-b / --burst`` to control the interval (in seconds).
 Note that ``-b0`` means ``Single Mode``, which is the default.
-
 
 Single Mode
 +++++++++++
@@ -54,7 +50,6 @@ which are discouraged for the time being.
 
 Another bad news is that readline_ does not work :scream:,
 and I can't figure out the reason :scream:.
-
 
 Exercises
 ---------
@@ -292,7 +287,6 @@ Available Courses
 
 Other courses might be added later.
 
-
 `Stack-based buffer overflow`_
 ------------------------------
 
@@ -326,7 +320,6 @@ This course is not demonstrative enough
 and shall be updated when the author finds a scenario
 where `nop-slide`_ really stands out.
 
-
 3. jmp-esp
 ++++++++++
 
@@ -340,9 +333,8 @@ ASLR: Disabled.
 
 Stack Protector: Disabled.
 
-
-4. off-by-one
-+++++++++++++
+4. off-by-one NULL
+++++++++++++++++++
 
 Variant of ``plain`` `stack-based buffer overflow`_.
 
@@ -353,7 +345,6 @@ NX: Disabled.
 ASLR: Disabled.
 
 Stack Protector: Disabled.
-
 
 5. ret2lib_
 +++++++++++
@@ -381,7 +372,6 @@ without resort to certain gadgets.
 
 Therefore, it may be discussed in the section for ROP_.
 
-
 6. frame-faking
 +++++++++++++++
 
@@ -394,7 +384,6 @@ NX: **Enabled**.
 ASLR: Disabled.
 
 Stack Protector: Disabled.
-
 
 Notes for x64
 *************
@@ -446,6 +435,8 @@ TODO List & You Can Contribute
 
   Ref. Some GDB_ enhancement projects have already implemented this.
 
+- Synchronize the display when executing state-changing commands.
+
 - Add course variants that does not allow NULL bytes.
 
   For example, add variant courses
@@ -468,6 +459,9 @@ TODO List & You Can Contribute
              Faked(b'system', ['/bin/sh']) +
              Faked(b'execl', ['/bin/sh', '/bin/sh', 0]) +
              Faked(b'exit', [0]))
+
+- Support demonstration on Windows and MacOS.
+
 
 References
 ==========
