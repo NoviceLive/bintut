@@ -92,7 +92,7 @@ Tested Platforms
 `Arch GNU/Linux`_
 +++++++++++++++++
 
-Current version of `Arch Linux`_ ships GDB_ with Python_ 3,
+Current version of `Arch GNU/Linux`_ ships GDB_ with Python_ 3,
 in which I developed BinTut.
 
 The latest release version should work fine.
@@ -129,7 +129,7 @@ The latest release version should work fine.
 The latest Fedora Workstation comes with GDB_ with Python_ 3,
 which has been tested
 and BinTut is known to work properly
-as in `Arch Linux`_.
+as in `Arch GNU/Linux`_.
 
 - Install ``glibc.i686`` to support 32-bit programs if needed.
 
@@ -152,7 +152,7 @@ as in `Arch Linux`_.
 `Debian GNU/Linux`_
 +++++++++++++++++++
 
-GDB_ from the stable branch of Debian_ ships with Python_ 2.
+GDB_ from the stable branch of `Debian GNU/Linux`_ ships with Python_ 2.
 
 Latest source from Git works with minor problems.
 
@@ -183,7 +183,7 @@ Latest source from Git works with minor problems.
 `Kali GNU/Linux`_
 +++++++++++++++++
 
-GDB_ from the latest rolling version of Kali_ ships with Python_ 3.
+GDB_ from the latest rolling version of `Kali GNU/Linux`_ ships with Python_ 3.
 
 - Enable ``i386`` support according to aforementioned instructions.
 
