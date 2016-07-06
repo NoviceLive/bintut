@@ -19,6 +19,7 @@ along with BinTut.  If not, see <http://www.gnu.org/licenses/>.
 
 
 from __future__ import division, absolute_import, print_function
+import sys
 
 from pkg_resources import resource_filename
 
@@ -37,5 +38,6 @@ VERSION_PROMPT = (
     'This is free software; see the source for '
     'copying conditions.\nThere is NO warranty; '
     'not even for MERCHANTABILITY nor \nFITNESS FOR '
-    'A PARTICULAR PURPOSE.'.format(__version__, __author__)
+    'A PARTICULAR PURPOSE.\n\nPython, version {}'.format(
+        __version__, __author__, sys.version)
 )

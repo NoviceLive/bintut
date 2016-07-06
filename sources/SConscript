@@ -1,27 +1,50 @@
 Program('fread-nx_off-canary_off-x86',
-        Object('1so.o', 'so.c', CCFLAGS='-m32'),
-        LINKFLAGS=['-m32', '-zexecstack', '-fno-stack-protector'])
-Program('fread-nx_on-canary_off-x86',
-        Object('2so.o', 'so.c', CCFLAGS='-m32'),
-        LINKFLAGS=['-m32', '-fno-stack-protector'])
-
-
+        Object('1so.o', 'stack-overflow.c',
+               CCFLAGS=['-m32', '-fno-stack-protector']),
+        LINKFLAGS=['-m32', '-zexecstack'])
 Program('fread-nx_off-canary_off-x64',
-        Object('1so64.o', 'so.c', CCFLAGS=''),
-        LINKFLAGS=['-zexecstack', '-fno-stack-protector'])
+        Object('1so64.o', 'stack-overflow.c',
+               CCFLAGS=['-fno-stack-protector']),
+        LINKFLAGS=['-zexecstack'])
+
+
+Program('fread-nx_on-canary_off-x86',
+        Object('2so.o', 'stack-overflow.c',
+               CCFLAGS=['-m32', '-fno-stack-protector']),
+        LINKFLAGS=['-m32'])
 Program('fread-nx_on-canary_off-x64',
-        Object('2so64.o', 'so.c', CCFLAGS=''),
-        LINKFLAGS=['-fno-stack-protector'])
+        Object('2so64.o', 'stack-overflow.c',
+               CCFLAGS=['-fno-stack-protector']),
+        LINKFLAGS=[])
 
 
-# Program('fread-nx_on-canary_on-x86',
-#         Object('3so.o', 'so.c', CCFLAGS='-m32'),
-#         LINKFLAGS=['-m32', '-fstack-protector-all'])
-# Program('fread-nx_on-canary_on-x64',
-#         Object('3so64.o', 'so.c', CCFLAGS=''),
-#         LINKFLAGS=['-fstack-protector-all'])
+Program('fread-nx_on-canary_on-x86',
+        Object('3so.o', 'stack-overflow.c',
+               CCFLAGS=['-m32', '-fstack-protector-all']),
+        LINKFLAGS=['-m32'])
+Program('fread-nx_on-canary_on-x64',
+        Object('3so64.o', 'stack-overflow.c',
+               CCFLAGS=['-fstack-protector-all']),
+        LINKFLAGS=[])
 
 
-Program('df-nx_off-canary_off-x86',
-        Object('1df.o', 'df.c', CCFLAGS='-m32'),
-        LINKFLAGS=['-m32', '-zexecstack', '-fno-stack-protector'])
+Program('obo-nx_off-canary_off-x86',
+        Object('1obo.o', 'off-by-one.c',
+               CCFLAGS=['-m32', '-mpreferred-stack-boundary=2',
+                        '-fno-stack-protector']),
+        LINKFLAGS=['-m32', '-zexecstack'])
+Program('obo-nx_off-canary_off-x64',
+        Object('1obo64.o', 'off-by-one.c',
+               CCFLAGS=['-mpreferred-stack-boundary=4',
+                        '-fno-stack-protector']),
+        LINKFLAGS=['-zexecstack'])
+
+
+Program('df-x86',
+        Object('1df.o', 'double-free.c',
+               CCFLAGS=['-m32']),
+        LINKFLAGS=['-m32'])
+Program('df-x64',
+        Object('1df64.o', 'double-free.c',
+               CCFLAGS=[]),
+        LINKFLAGS=[])

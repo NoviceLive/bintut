@@ -1,5 +1,5 @@
 BinTut
-======
+@@@@@@
 
 
 .. image:: https://img.shields.io/pypi/v/bintut.svg
@@ -79,10 +79,6 @@ make sure that you use the pip_ version
 corresponding to the Python_ version shipped with GDB_.
 For more details, see `#1`_.
 
-Python_ binding of Capstone_ and filebytes_
-might have to be installed manually before Ropper_ can be installed.
-
-
 ``pip install bintut`` may or may not work for the time being.
 
 Therefore it's recommended to just clone this repository
@@ -90,6 +86,10 @@ and run without installation
 as long as necessary libraries are installed
 by ``pip install -r requirements.txt``.
 
+Warning
+-------
+
+BinTut does not work inside virtualenv at present.
 
 Tested Platforms
 ----------------
@@ -101,6 +101,32 @@ Current version of `Arch Linux`_ ships GDB_ with Python_ 3,
 in which I developed BinTut.
 
 The lastest release version should work fine.
+
+- Enable ``multilib`` in ``/etc/pacman.conf``.
+
+- Install ``gcc-mulitilib`` to support compiling and execution of 32-bit programs.
+
+  ::
+
+     sudo pacman -S gcc-mulitilib
+
+- Install Python_ 3 and ``pip3``.
+
+  ::
+
+     sudo pacman -S python python-pip
+
+- Install BinTut using ``pip3``
+
+  ::
+
+     sudo pip3 install bintut
+
+- You are ready!
+
+  ::
+
+     bintut -b0.1 jmp-esp
 
 Fedora_
 +++++++
@@ -157,6 +183,32 @@ Lastest source from Git works with minor problems.
   ::
 
      python2 ./bintut.py -b0.1 frame-faking
+
+
+Kali_
++++++
+
+GDB_ from the lastest rolling version of Kali_ ships with Python_ 3.
+
+- Enable ``i386`` support according to aforementioned instructions.
+
+- Install ``pip3``
+
+  ::
+
+     apt-get install python3-pip
+
+- Install the lastest BinTut release using ``pip3``
+
+  ::
+
+     pip3 install bintut
+
+- Start hacking!
+
+  ::
+
+     bintut -b0.1 jmp-esp
 
 
 Requirements
@@ -257,7 +309,6 @@ ASLR: Disabled.
 
 Stack Protector: Disabled.
 
-
 2. `nop-slide`_
 +++++++++++++++
 
@@ -290,7 +341,21 @@ ASLR: Disabled.
 Stack Protector: Disabled.
 
 
-4. ret2lib_
+4. off-by-one
++++++++++++++
+
+Variant of ``plain`` `stack-based buffer overflow`_.
+
+Linux x86 / x64.
+
+NX: Disabled.
+
+ASLR: Disabled.
+
+Stack Protector: Disabled.
+
+
+5. ret2lib_
 +++++++++++
 
 Return to functions.
@@ -317,7 +382,7 @@ without resort to certain gadgets.
 Therefore, it may be discussed in the section for ROP_.
 
 
-5. frame-faking
+6. frame-faking
 +++++++++++++++
 
 Return to chained functions via LEAVE RET gadget.
@@ -342,15 +407,67 @@ Bug Reports
 
 Create `issues <https://github.com/NoviceLive/bintut/issues>`_.
 
-BinTut may or may not work on your system,
+BinTut might or might not work on your system,
 but bug reports with necessary information are always welcome.
 
 Tips
 ----
 
-Submit the verbose log (``stderr``) if you are just out of words,
+Remember to include ``bintut --version`` in your report.
+
+You can just submit the verbose log (``stderr``) if out of words,
 e.g., ``bintut -v -b0.1 frame-faking 2>log.txt``.
 
+
+TODO List & You Can Contribute
+==============================
+
+- Improve the code if you find something that can be done better.
+
+  The codebase of BinTut can always be improved by those
+  who have a deeper understanding of Python than the author.
+
+  Also, there are hardcoded behaviors which can be generalized.
+
+- Change color scheme to red highlight when content changes.
+
+  Currently, our color scheme remains unchanged,
+  in predefined colors,
+  which is just not eye-catching or obvious
+  when we want to observe some significant changes
+  in certain registers or specific memory locations.
+
+  Here is an example of such change,
+  the least-significant-**byte** of saved EBP / RBP
+  being cleared due to an off-by-one NULL write.
+
+  Ref. That's what you will expect in OllyDbg
+  and probably many other debuggers will also behave in this manner.
+
+  Ref. Some GDB_ enhancement projects have already implemented this.
+
+- Add course variants that does not allow NULL bytes.
+
+  For example, add variant courses
+  using ``strcpy`` instead of ``fread`` to trigger overflow,
+  in order to demonstrate the techniques
+  to survive in severe environments,
+  which happen to be the case of our real world.
+
+- Use a better combination of chained functions for ``frame-faking``.
+
+  What follows is the current choice.
+
+  Yes, two consecutive ``/bin/sh`` and ``exit``.
+
+  ::
+
+     elif post == 'frame-faking':
+         payload = (
+             Faked(offset=offset, address=addr) +
+             Faked(b'system', ['/bin/sh']) +
+             Faked(b'execl', ['/bin/sh', '/bin/sh', 0]) +
+             Faked(b'exit', [0]))
 
 References
 ==========
@@ -363,6 +480,7 @@ References
 .. _Arch Linux: https://www.archlinux.org/
 .. _Fedora: https://getfedora.org/
 .. _Debian: https://www.debian.org/
+.. _Kali: https://www.kali.org/
 
 .. _pip: https://pip.pypa.io/
 .. _Python: https://www.python.org/
