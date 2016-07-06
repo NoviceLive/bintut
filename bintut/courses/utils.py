@@ -68,7 +68,9 @@ def select_target(course, platform, bits):
     courses['linux']['jmp-esp'] = 'fread-nx_off-canary_off-{}'
     courses['linux']['ret2lib'] = 'fread-nx_on-canary_off-x86'
     courses['linux']['frame-faking'] = 'fread-nx_on-canary_off-x86'
+    courses['linux']['off-by-one'] = 'obo-nx_off-canary_off-{}'
     # WARN: Don't use dashes.
+    # TODO: Support them in reality.
     courses['win32']['plain'] = 'win{}.exe'
     courses['win32']['nop-slide'] = 'win{}.exe'
     target = courses[platform][course]

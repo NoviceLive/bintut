@@ -99,4 +99,7 @@ def make_courses():
     courses.update({
         'frame-faking':
         'Return to chained functions via LEAVE RET. (Linux x86.)'})
+    courses.update({
+        'off-by-one':
+        'off-by-one stack-based buffer overflow. (Linux x86 / x64.)'})
     return courses
