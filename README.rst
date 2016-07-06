@@ -466,9 +466,9 @@ TODO List & You Can Contribute
 References
 ==========
 
-- `Smashing The Stack For Fun And Profit <http://phrack.org/issues/49/14.html>`_
-
-- `Advanced return-into-lib(c) exploits (PaX case study) <http://phrack.org/issues/58/4.html>`_
+- `Smashing The Stack For Fun And Profit <http://phrack.org/issues/49/14.html#article>`_
+- `The Frame Pointer Overwrite <http://phrack.org/issues/55/8.html#article>`_
+- `Advanced return-into-lib(c) exploits (PaX case study) <http://phrack.org/issues/58/4.html#article>`_
 
 
 .. _Arch Linux: https://www.archlinux.org/
