@@ -11,6 +11,14 @@ from debugging to payload generation and exploitation,
 for educational purposes :yum:.
 
 
+Official Mirrors
+----------------
+
+- https://gitlab.com/imtheforce/bintut
+- https://bitbucket.org/fourthorigin/bintut
+- https://github.com/NoviceLive/bintut
+
+
 What's BinTut
 =============
 
