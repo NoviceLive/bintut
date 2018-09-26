@@ -1,4 +1,4 @@
-include COPYING.txt
+include LICENSE.txt
 include requirements.txt
 include SConstruct
 include make.cmd

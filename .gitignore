@@ -12,3 +12,6 @@ build
 peda-session-*
 history
 *.dot
+
+
+githooks/pre-commit
