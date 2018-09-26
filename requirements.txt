@@ -4,4 +4,4 @@ pat
 
 ropper
 
-pyelftools
+pyelftools==0.25
