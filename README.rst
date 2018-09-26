@@ -97,13 +97,11 @@ in which I developed BinTut.
 
 The latest release version should work fine.
 
-- Enable ``multilib`` in ``/etc/pacman.conf``.
-
-- Install ``gcc-mulitilib`` to support compiling and execution of 32-bit programs.
+- Install ``lib32-glibc``
 
   ::
 
-     sudo pacman -S gcc-mulitilib
+     sudo pacman -S lib32-glibc
 
 - Install Python_ 3 and ``pip3``.
 
